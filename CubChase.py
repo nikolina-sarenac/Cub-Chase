@@ -14,8 +14,9 @@ class CubChase(QWidget):
 
     def initUI(self):
         self.hbox = QHBoxLayout(self)
-
         self.pixmap = QPixmap("rsz_lion.jpg")
+        self.setMaximumSize(640, 480)
+        self.setMinimumSize(640, 480)
 
         self.lbl = QLabel(self)
         self.lbl.setPixmap(self.pixmap)

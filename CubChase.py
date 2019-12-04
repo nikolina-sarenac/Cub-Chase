@@ -35,24 +35,22 @@ class CubChase(QWidget):
         self.btn.resize(93, 50)
         self.btn.move(150, 340)
 
-        self.btn1 = QPushButton('', self)
-        self.btn1.setVisible(False)
+
         self.show()
 
     def showDialog(self):
-        self.pixmap = QPixmap("rsz_lion.jpg")
+        self.pixmap = QPixmap("pozadina2.png")
         self.lbl.setPixmap(self.pixmap)
 
-        self.btn.setText('Single player')
+        self.btn.setText('')
         self.btn.resize(150, 50)
         self.btn.move(100, 400)
-        self.btn.setIcon(QIcon())
+        self.btn.setIcon(QIcon("startdugme.jpg"))
+        self.btn.setIconSize(QSize(89, 46))
+        self.btn.resize(93, 50)
+        self.btn.move(285, 355)
+        
 
-        self.btn1.setText('Multiplayer')
-        self.btn1.setStyleSheet('background-color: #fdc086; border: 5px solid beige; font: Bold')
-        self.btn1.setVisible(True)
-        self.btn1.resize(150, 50)
-        self.btn1.move(420, 400)
 
         self.show()
 

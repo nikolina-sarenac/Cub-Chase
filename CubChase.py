@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import (QWidget, QHBoxLayout,
                              QLabel, QApplication, QPushButton, QLineEdit, QInputDialog)
-from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QPixmap
+from PyQt5.QtCore import (Qt, QSize)
+from PyQt5.QtGui import (QPixmap, QIcon)
 import sys
 
 
@@ -27,9 +27,12 @@ class CubChase(QWidget):
         self.move(150, 100)
         self.setWindowTitle('Start window')
 
-        self.btn = QPushButton('Start', self)
+        self.btn = QPushButton('', self)
         self.btn.clicked.connect(self.showDialog)
-        self.btn.resize(90, 50)
+        self.btn.setIcon(QIcon("startdugme.jpg"))
+        self.btn.setStyleSheet('background-color: #fdc086; border: 5px solid beige; font: Bold')
+        self.btn.setIconSize(QSize(89, 46))
+        self.btn.resize(93, 50)
         self.btn.move(150, 340)
 
         self.btn1 = QPushButton('', self)
@@ -43,8 +46,10 @@ class CubChase(QWidget):
         self.btn.setText('Single player')
         self.btn.resize(150, 50)
         self.btn.move(100, 400)
+        self.btn.setIcon(QIcon())
 
         self.btn1.setText('Multiplayer')
+        self.btn1.setStyleSheet('background-color: #fdc086; border: 5px solid beige; font: Bold')
         self.btn1.setVisible(True)
         self.btn1.resize(150, 50)
         self.btn1.move(420, 400)

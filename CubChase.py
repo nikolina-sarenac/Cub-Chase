@@ -17,14 +17,14 @@ class Maze:
                      1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
                      1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
                      1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-                     1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-                     1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-                     1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-                     1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-                     1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-                     1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-                     1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-                     1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+                     1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1,
+                     1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1,
+                     1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1,
+                     1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1,
+                     1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1,
+                     1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1,
+                     1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1,
+                     1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1,
                      1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
                      1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
                      1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
@@ -42,10 +42,30 @@ class Maze:
                 bx = 0
                 by = by + 1
 
+    def value(self, x, y):
+        ret = 0
+        if self.maze[x + (y * self.M)] == 1:
+            ret = 1
+            a = 5
+            b = 7
+
+        return ret
+
 
 class CubChase(QWidget):
+    screen = 1
     windowWidth = 640
     windowHeight = 480
+    x = 40
+    y = 40
+    width = 50
+    height = 50
+    vel = 2
+
+    matW = 640/22
+    matH = 480/16
+
+    run = True
 
     def __init__(self):
         super().__init__()
@@ -93,7 +113,6 @@ class CubChase(QWidget):
         self.btn.resize(93, 50)
         self.btn.move(285, 355)
         self.btn.clicked.connect(self.showMaze)
-
         self.show()
 
     def showMaze(self):
@@ -102,15 +121,80 @@ class CubChase(QWidget):
         self.move(150, 100)
         self._display_surf = pygame.display.set_mode((self.windowWidth, self.windowHeight), pygame.HWSURFACE)
         self._block_surf = pygame.image.load("block3.jpg").convert()
-        self._background = pygame.image.load("playWin.png").convert()
+        self._background = pygame.image.load("grass.jpg").convert()
         self.on_render()
         self.show()
 
+        while self.run:
+            pygame.time.delay(30)
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.run = False
+
+            keys = pygame.key.get_pressed()
+
+            if keys[pygame.K_LEFT]:
+                self.x -= self.vel
+                mx = int(self.x // self.matW)
+                my = int(self.y // self.matH)
+                val = self.maze.value(mx, my)
+                my2 = int((self.y + self.height) // self.matH)
+                val2 = self.maze.value(mx, my2)
+                if val == 1 or val2 == 1:
+                    self.x += self.vel
+
+            if keys[pygame.K_RIGHT]:
+                self.x += self.vel
+                mx = int((self.x + self.width) // self.matW)
+                my = int(self.y // self.matH)
+                val = self.maze.value(mx, my)
+                my2 = int((self.y + self.height) // self.matH)
+                val2 = self.maze.value(mx, my2)
+                if val == 1 or val2 == 1:
+                    self.x -= self.vel
+
+            if keys[pygame.K_UP]:
+                self.y -= self.vel
+                mx = int(self.x // self.matW)
+                my = int(self.y // self.matH)
+                val = self.maze.value(mx, my)
+                mx2 = int((self.x + self.width) // self.matW)
+                val2 = self.maze.value(mx2, my)
+                if val == 1 or val2 == 1:
+                    self.y += self.vel
+
+            if keys[pygame.K_DOWN]:
+                self.y += self.vel
+                mx = int(self.x // self.matW)
+                my = int((self.y + self.height) // self.matH)
+                val = self.maze.value(mx, my)
+                mx2 = int((self.x + self.width) // self.matW)
+                val2 = self.maze.value(mx2, my)
+                if val == 1 or val2 == 1:
+                    self.y -= self.vel
+
+            self.redraw_window()
+
+        pygame.quit()
+
     def on_render(self):
-        screen = pygame.display.set_mode((self.windowWidth, self.windowHeight))
-        screen.blit(self._background, [0, 0])
+        self.screen = pygame.display.set_mode((self.windowWidth, self.windowHeight))
+        self.screen.blit(self._background, [0, 0])
         self.maze.draw(self._display_surf, self._block_surf)
         pygame.display.flip()
+
+    def redraw_window(self):
+        self.screen.blit(self._background, [0, 0])
+        self.maze.draw(self._display_surf, self._block_surf)
+        simba = pygame.image.load('simba.png')
+        self.screen.blit(simba, (self.x, self.y))
+        #pygame.draw.rect(self._display_surf, (255, 0, 0), (self.x, self.y, self.width, self.height))
+        pygame.display.update()
+        #screen = pygame.display.set_mode((self.windowWidth, self.windowHeight))
+        #self.screen.blit(self._background, [0, 0])
+        #self.screen.blit(('rsz_simba.png'), (self.x, self.y))
+        #pygame.display.update()
 
 
 if __name__ == '__main__':

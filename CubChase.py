@@ -91,6 +91,20 @@ class CubChase(QWidget):
         self.move(150, 100)
         self.setWindowTitle('Cub Chase')
 
+        self.txtbox1 = QLineEdit(self)
+        self.txtbox1.move(228, 315)
+        self.txtbox1.resize(93, 23)
+        self.txtbox1.setStyleSheet('background-color: #f5deb3; border: 2px solid teal; font: Bold')
+        self.txtbox1.setAlignment(Qt.AlignCenter)
+        self.txtbox1.setVisible(False)
+
+        self.txtbox2 = QLineEdit(self)
+        self.txtbox2.move(344, 315)
+        self.txtbox2.resize(93, 23)
+        self.txtbox2.setStyleSheet('background-color: #f5deb3; border: 2px solid teal; font: Bold')
+        self.txtbox2.setAlignment(Qt.AlignCenter)
+        self.txtbox2.setVisible(False)
+
         self.btn = QPushButton('', self)
         self.btn.clicked.connect(self.showDialog)
         self.btn.setStyleSheet('background-color: rgba(255, 255, 255, 0)')
@@ -98,6 +112,9 @@ class CubChase(QWidget):
         self.btn.setIconSize(QSize(89, 46))
         self.btn.resize(100, 50)
         self.btn.move(120, 323)
+
+        self.btn1 = QPushButton('', self)
+        self.btn1.setVisible(False)
 
         self.show()
 
@@ -113,6 +130,20 @@ class CubChase(QWidget):
         self.btn.resize(93, 50)
         self.btn.move(285, 355)
         self.btn.clicked.connect(self.showMaze)
+
+        self.txtbox1.setVisible(True)
+        self.txtbox2.setVisible(True)
+
+        self.btn1.setVisible(True)
+        self.btn1.setText('')
+        self.btn1.resize(150, 50)
+        self.btn1.move(100, 400)
+        self.btn1.setIcon(QIcon("startdugme.jpg"))
+        self.btn1.setIconSize(QSize(89, 46))
+        self.btn1.resize(93, 50)
+        self.btn1.move(285, 355)
+        self.btn1.clicked.connect(self.showMaze)
+        self.btn1.clicked.connect(self.hide)
         self.show()
 
     def showMaze(self):

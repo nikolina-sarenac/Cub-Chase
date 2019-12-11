@@ -14,19 +14,19 @@ class Maze:
         self.M = 22
         self.N = 16
         self.maze = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-                     1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-                     1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-                     1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-                     1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1,
-                     1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1,
-                     1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1,
-                     1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1,
-                     1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1,
-                     1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1,
-                     1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1,
-                     1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1,
-                     1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-                     1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+                     1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1,
+                     1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1,
+                     1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1,
+                     1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1,
+                     1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1,
+                     1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1,
+                     1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1,
+                     1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1,
+                     1, 0, 1, 0, 0, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 0, 0, 0, 1, 0, 1,
+                     1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1,
+                     1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1,
+                     1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1,
+                     1, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 1,
                      1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
                      1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 
@@ -56,11 +56,13 @@ class CubChase(QWidget):
     screen = 1
     windowWidth = 640
     windowHeight = 480
-    x = 40
-    y = 40
-    width = 50
-    height = 50
-    vel = 2
+    x = 230
+    y = 200
+    x2 = 370
+    y2 = 200
+    width = 28
+    height = 28
+    vel = 5
 
     matW = 640/22
     matH = 480/16
@@ -122,15 +124,6 @@ class CubChase(QWidget):
         self.pixmap = QPixmap("pozadina2.png")
         self.lbl.setPixmap(self.pixmap)
 
-        self.btn.setText('')
-        self.btn.resize(150, 50)
-        self.btn.move(100, 400)
-        self.btn.setIcon(QIcon("startdugme.jpg"))
-        self.btn.setIconSize(QSize(89, 46))
-        self.btn.resize(93, 50)
-        self.btn.move(285, 355)
-        self.btn.clicked.connect(self.showMaze)
-
         self.txtbox1.setVisible(True)
         self.txtbox2.setVisible(True)
 
@@ -142,6 +135,7 @@ class CubChase(QWidget):
         self.btn1.setIconSize(QSize(89, 46))
         self.btn1.resize(93, 50)
         self.btn1.move(285, 355)
+        self.btn1.setCursor(Qt.PointingHandCursor)
         self.btn1.clicked.connect(self.showMaze)
         self.btn1.clicked.connect(self.hide)
         self.show()
@@ -205,6 +199,46 @@ class CubChase(QWidget):
                 if val == 1 or val2 == 1:
                     self.y -= self.vel
 
+            if keys[pygame.K_a]:
+                self.x2 -= self.vel
+                mx = int(self.x2 // self.matW)
+                my = int(self.y2 // self.matH)
+                val = self.maze.value(mx, my)
+                my2 = int((self.y2 + self.height) // self.matH)
+                val2 = self.maze.value(mx, my2)
+                if val == 1 or val2 == 1:
+                    self.x2 += self.vel
+
+            if keys[pygame.K_d]:
+                self.x2 += self.vel
+                mx = int((self.x2 + self.width) // self.matW)
+                my = int(self.y2 // self.matH)
+                val = self.maze.value(mx, my)
+                my2 = int((self.y2 + self.height) // self.matH)
+                val2 = self.maze.value(mx, my2)
+                if val == 1 or val2 == 1:
+                    self.x2 -= self.vel
+
+            if keys[pygame.K_w]:
+                self.y2 -= self.vel
+                mx = int(self.x2 // self.matW)
+                my = int(self.y2 // self.matH)
+                val = self.maze.value(mx, my)
+                mx2 = int((self.x2 + self.width) // self.matW)
+                val2 = self.maze.value(mx2, my)
+                if val == 1 or val2 == 1:
+                    self.y2 += self.vel
+
+            if keys[pygame.K_s]:
+                self.y2 += self.vel
+                mx = int(self.x2 // self.matW)
+                my = int((self.y2 + self.height) // self.matH)
+                val = self.maze.value(mx, my)
+                mx2 = int((self.x2 + self.width) // self.matW)
+                val2 = self.maze.value(mx2, my)
+                if val == 1 or val2 == 1:
+                    self.y2 -= self.vel
+
             self.redraw_window()
 
         pygame.quit()
@@ -220,6 +254,7 @@ class CubChase(QWidget):
         self.maze.draw(self._display_surf, self._block_surf)
         simba = pygame.image.load('simba.png')
         self.screen.blit(simba, (self.x, self.y))
+        self.screen.blit(simba, (self.x2, self.y2))
         #pygame.draw.rect(self._display_surf, (255, 0, 0), (self.x, self.y, self.width, self.height))
         pygame.display.update()
         #screen = pygame.display.set_mode((self.windowWidth, self.windowHeight))

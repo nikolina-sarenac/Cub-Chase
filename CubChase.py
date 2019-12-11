@@ -60,9 +60,10 @@ class CubChase(QWidget):
     y = 200
     x2 = 370
     y2 = 200
+
     width = 28
     height = 28
-    vel = 5
+    vel = 2
 
     matW = 640/22
     matH = 480/16

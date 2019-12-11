@@ -58,8 +58,9 @@ class CubChase(QWidget):
     windowHeight = 480
     x = 230
     y = 200
-    x2 = 270
+    x2 = 370
     y2 = 200
+
     width = 28
     height = 28
     vel = 2

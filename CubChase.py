@@ -138,10 +138,11 @@ class CubChase(QWidget):
         self.btn1.move(285, 355)
         self.btn1.setCursor(Qt.PointingHandCursor)
         self.btn1.clicked.connect(self.showMaze)
-        self.btn1.clicked.connect(self.hide)
+        #self.btn1.clicked.connect(self.hide)
         self.show()
 
     def showMaze(self):
+        self.hide()
         pygame.init()
         pygame.display.set_caption('Cub Chase')
         self.move(150, 100)
@@ -149,7 +150,7 @@ class CubChase(QWidget):
         self._block_surf = pygame.image.load("block3.jpg").convert()
         self._background = pygame.image.load("grass.jpg").convert()
         self.on_render()
-        self.show()
+        #self.show()
 
         while self.run:
             pygame.time.delay(30)

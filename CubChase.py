@@ -1,81 +1,39 @@
-from PyQt5.QtWidgets import (QWidget, QHBoxLayout,
-                             QLabel, QApplication, QPushButton, QLineEdit, QInputDialog)
+from PyQt5.QtWidgets import (QWidget, QHBoxLayout, QLabel, QApplication, QPushButton, QLineEdit)
 from PyQt5.QtCore import (Qt, QSize)
-from PyQt5.QtGui import (QPixmap, QIcon, QCursor)
-from PyQt5 import QtCore
+from PyQt5.QtGui import (QPixmap, QIcon)
+from multiprocessing import Process, Queue, Value
 import sys
-from PyQt5.uic.properties import QtCore
-from pygame.locals import *
 import pygame
-
-
-class Maze:
-    def __init__(self):
-        self.M = 22
-        self.N = 16
-        self.maze = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-                     1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1,
-                     1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1,
-                     1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1,
-                     1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1,
-                     1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1,
-                     1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1,
-                     1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1,
-                     1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1,
-                     1, 0, 1, 0, 0, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 0, 0, 0, 1, 0, 1,
-                     1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1,
-                     1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1,
-                     1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1,
-                     1, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 1,
-                     1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-                     1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
-
-    def draw(self, display_surf, image_surf):
-        bx = 0
-        by = 0
-        for i in range(0, self.M * self.N):
-            if self.maze[bx + (by * self.M)] == 1:
-                display_surf.blit(image_surf, (bx * 29, by * 30))
-
-            bx = bx + 1
-            if bx > self.M - 1:
-                bx = 0
-                by = by + 1
-
-    def value(self, x, y):
-        ret = 0
-        if self.maze[x + (y * self.M)] == 1:
-            ret = 1
-            a = 5
-            b = 7
-
-        return ret
+import CubMaze
+import PlayerProcess
+import CubPaws
 
 
 class CubChase(QWidget):
-    screen = 1
-    windowWidth = 640
-    windowHeight = 480
-    x = 230
-    y = 200
-    x2 = 370
-    y2 = 200
-
-    width = 28
-    height = 28
-    vel = 2
-
-    matW = 640/22
-    matH = 480/16
-
-    run = True
-
     def __init__(self):
         super().__init__()
-        self.maze = Maze()
+        self.maze = CubMaze.Maze()
+        self.paws1 = CubPaws.Paws()
+        self.paws2 = CubPaws.Paws()
         self._block_surf = None
         self._display_surf = None
         self._background = None
+        self.screen = None
+        self.playerOne = None
+        self.playerTwo = None
+
+        self.windowWidth = 640
+        self.windowHeight = 480
+        self.x = Value('i', 230)
+        self.y = Value('i', 200)
+        self.x2 = Value('i', 370)
+        self.y2 = Value('i', 200)
+        self.width = 28
+        self.height = 28
+        self.vel = 3
+        self.matW = 640 / 22
+        self.matH = 480 / 16
+        self.run = True
 
         self.initUI()
 
@@ -138,7 +96,6 @@ class CubChase(QWidget):
         self.btn1.move(285, 355)
         self.btn1.setCursor(Qt.PointingHandCursor)
         self.btn1.clicked.connect(self.showMaze)
-        #self.btn1.clicked.connect(self.hide)
         self.show()
 
     def showMaze(self):
@@ -149,121 +106,66 @@ class CubChase(QWidget):
         self._display_surf = pygame.display.set_mode((self.windowWidth, self.windowHeight), pygame.HWSURFACE)
         self._block_surf = pygame.image.load("block3.jpg").convert()
         self._background = pygame.image.load("grass.jpg").convert()
+        self.playerOne = pygame.image.load('simba.png')
+        self.playerTwo = pygame.image.load('Nalaa.png')
         self.on_render()
-        #self.show()
 
-        while self.run:
+        q1input = Queue()
+        q2input = Queue()
+        quit_queue = Queue()
+
+        p1 = Process(target=PlayerProcess.player_function, args=(self.x, self.y, q1input, quit_queue, ))
+        p2 = Process(target=PlayerProcess.player_function, args=(self.x2, self.y2, q2input, quit_queue, ))
+        p1.start()
+        p2.start()
+        do = True
+        while do:
             pygame.time.delay(30)
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    self.run = False
+                    do = False
+                    quit_queue.put(1)
 
             keys = pygame.key.get_pressed()
 
             if keys[pygame.K_LEFT]:
-                self.x -= self.vel
-                mx = int(self.x // self.matW)
-                my = int(self.y // self.matH)
-                val = self.maze.value(mx, my)
-                my2 = int((self.y + self.height) // self.matH)
-                val2 = self.maze.value(mx, my2)
-                if val == 1 or val2 == 1:
-                    self.x += self.vel
-
+                q1input.put(1)
             if keys[pygame.K_RIGHT]:
-                self.x += self.vel
-                mx = int((self.x + self.width) // self.matW)
-                my = int(self.y // self.matH)
-                val = self.maze.value(mx, my)
-                my2 = int((self.y + self.height) // self.matH)
-                val2 = self.maze.value(mx, my2)
-                if val == 1 or val2 == 1:
-                    self.x -= self.vel
-
+                q1input.put(2)
             if keys[pygame.K_UP]:
-                self.y -= self.vel
-                mx = int(self.x // self.matW)
-                my = int(self.y // self.matH)
-                val = self.maze.value(mx, my)
-                mx2 = int((self.x + self.width) // self.matW)
-                val2 = self.maze.value(mx2, my)
-                if val == 1 or val2 == 1:
-                    self.y += self.vel
-
+                q1input.put(3)
             if keys[pygame.K_DOWN]:
-                self.y += self.vel
-                mx = int(self.x // self.matW)
-                my = int((self.y + self.height) // self.matH)
-                val = self.maze.value(mx, my)
-                mx2 = int((self.x + self.width) // self.matW)
-                val2 = self.maze.value(mx2, my)
-                if val == 1 or val2 == 1:
-                    self.y -= self.vel
-
+                q1input.put(4)
             if keys[pygame.K_a]:
-                self.x2 -= self.vel
-                mx = int(self.x2 // self.matW)
-                my = int(self.y2 // self.matH)
-                val = self.maze.value(mx, my)
-                my2 = int((self.y2 + self.height) // self.matH)
-                val2 = self.maze.value(mx, my2)
-                if val == 1 or val2 == 1:
-                    self.x2 += self.vel
-
+                q2input.put(1)
             if keys[pygame.K_d]:
-                self.x2 += self.vel
-                mx = int((self.x2 + self.width) // self.matW)
-                my = int(self.y2 // self.matH)
-                val = self.maze.value(mx, my)
-                my2 = int((self.y2 + self.height) // self.matH)
-                val2 = self.maze.value(mx, my2)
-                if val == 1 or val2 == 1:
-                    self.x2 -= self.vel
-
+                q2input.put(2)
             if keys[pygame.K_w]:
-                self.y2 -= self.vel
-                mx = int(self.x2 // self.matW)
-                my = int(self.y2 // self.matH)
-                val = self.maze.value(mx, my)
-                mx2 = int((self.x2 + self.width) // self.matW)
-                val2 = self.maze.value(mx2, my)
-                if val == 1 or val2 == 1:
-                    self.y2 += self.vel
-
+                q2input.put(3)
             if keys[pygame.K_s]:
-                self.y2 += self.vel
-                mx = int(self.x2 // self.matW)
-                my = int((self.y2 + self.height) // self.matH)
-                val = self.maze.value(mx, my)
-                mx2 = int((self.x2 + self.width) // self.matW)
-                val2 = self.maze.value(mx2, my)
-                if val == 1 or val2 == 1:
-                    self.y2 -= self.vel
+                q2input.put(4)
 
             self.redraw_window()
 
+        p1.join()
+        p2.join()
         pygame.quit()
 
     def on_render(self):
         self.screen = pygame.display.set_mode((self.windowWidth, self.windowHeight))
         self.screen.blit(self._background, [0, 0])
         self.maze.draw(self._display_surf, self._block_surf)
+        self.screen.blit(self.playerOne, (self.x.value, self.y.value))
+        self.screen.blit(self.playerTwo, (self.x2.value, self.y2.value))
         pygame.display.flip()
 
     def redraw_window(self):
         self.screen.blit(self._background, [0, 0])
         self.maze.draw(self._display_surf, self._block_surf)
-        simba = pygame.image.load('simba.png')
-        nala  = pygame.image.load('Nalaa.png')
-        self.screen.blit(simba, (self.x, self.y))
-        self.screen.blit(nala, (self.x2, self.y2))
-        #pygame.draw.rect(self._display_surf, (255, 0, 0), (self.x, self.y, self.width, self.height))
+        self.screen.blit(self.playerOne, (self.x.value, self.y.value))
+        self.screen.blit(self.playerTwo, (self.x2.value, self.y2.value))
         pygame.display.update()
-        #screen = pygame.display.set_mode((self.windowWidth, self.windowHeight))
-        #self.screen.blit(self._background, [0, 0])
-        #self.screen.blit(('rsz_simba.png'), (self.x, self.y))
-        #pygame.display.update()
 
 
 if __name__ == '__main__':

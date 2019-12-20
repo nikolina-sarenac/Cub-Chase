@@ -8,7 +8,6 @@ import CubMaze
 import PlayerProcess
 import CubPaws
 
-
 class CubChase(QWidget):
     def __init__(self):
         super().__init__()
@@ -18,18 +17,20 @@ class CubChase(QWidget):
         self._block_surf = None
         self._display_surf = None
         self._background = None
+        self._paws_image = None
+        self._paws_image2 = None
         self.screen = None
         self.playerOne = None
         self.playerTwo = None
 
         self.windowWidth = 640
         self.windowHeight = 480
-        self.x = Value('i', 230)
-        self.y = Value('i', 200)
-        self.x2 = Value('i', 370)
-        self.y2 = Value('i', 200)
-        self.width = 28
-        self.height = 28
+        self.x = Value('i', 379)
+        self.y = Value('i', 210)
+        self.x2 = Value('i', 237)
+        self.y2 = Value('i', 210)
+        self.width = 25
+        self.height = 25
         self.vel = 3
         self.matW = 640 / 22
         self.matH = 480 / 16
@@ -104,6 +105,8 @@ class CubChase(QWidget):
         pygame.display.set_caption('Cub Chase')
         self.move(150, 100)
         self._display_surf = pygame.display.set_mode((self.windowWidth, self.windowHeight), pygame.HWSURFACE)
+        self._paws_image = pygame.image.load("paws.png")
+        self._paws_image2 = pygame.image.load("whitePaws.png")
         self._block_surf = pygame.image.load("block3.jpg").convert()
         self._background = pygame.image.load("grass.jpg").convert()
         self.playerOne = pygame.image.load('simba.png')
@@ -161,12 +164,47 @@ class CubChase(QWidget):
         pygame.display.flip()
 
     def redraw_window(self):
+        self.check_paws()
         self.screen.blit(self._background, [0, 0])
         self.maze.draw(self._display_surf, self._block_surf)
+        self.paws1.draw(self._display_surf, self._paws_image)
+        self.paws2.draw(self._display_surf, self._paws_image2)
         self.screen.blit(self.playerOne, (self.x.value, self.y.value))
         self.screen.blit(self.playerTwo, (self.x2.value, self.y2.value))
         pygame.display.update()
 
+    def check_paws(self):
+        mx1 = int(self.x.value // self.matW)
+        mx2 = int((self.x.value + self.width) // self.matW)
+        my1 = int((self.y.value + self.height) // self.matH)
+        my2 = int(self.y.value // self.matH)
+        val111 = self.paws1.get_value(mx1, my1)
+        val112 = self.paws1.get_value(mx2, my1)
+        val113 = self.paws1.get_value(mx1, my2)
+        val114 = self.paws1.get_value(mx2, my2)
+        val121 = self.paws2.get_value(mx1, my1)
+        val122 = self.paws2.get_value(mx2, my1)
+        val123 = self.paws2.get_value(mx2, my1)
+        val124 = self.paws2.get_value(mx2, my2)
+        if val111 == 0 and val112 == 0 and val113 == 0 and val114 == 0 and val121 == 0 and val122 == 0 and val123 == 0 \
+                and val124 == 0:
+            self.paws1.set_value(mx1, my1)
+
+        mx1 = int(self.x2.value // self.matW)
+        mx2 = int((self.x2.value + self.width) // self.matW)
+        my1 = int((self.y2.value + self.height) // self.matH)
+        my2 = int(self.y2.value // self.matH)
+        val111 = self.paws1.get_value(mx1, my1)
+        val112 = self.paws1.get_value(mx2, my1)
+        val113 = self.paws1.get_value(mx1, my2)
+        val114 = self.paws1.get_value(mx2, my2)
+        val121 = self.paws2.get_value(mx1, my1)
+        val122 = self.paws2.get_value(mx2, my1)
+        val123 = self.paws2.get_value(mx2, my1)
+        val124 = self.paws2.get_value(mx2, my2)
+        if val111 == 0 and val112 == 0 and val113 == 0 and val114 == 0 and val121 == 0 and val122 == 0 and val123 == 0 \
+                and val124 == 0:
+            self.paws2.set_value(mx1, my1)
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

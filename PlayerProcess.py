@@ -3,8 +3,8 @@ import CubMaze
 
 def player_function(xk, yk, qin, q):
     run = True
-    width = 28
-    height = 28
+    width = 25
+    height = 25
     vel = 2
     matW = 640 / 22
     matH = 480 / 16

@@ -7,6 +7,8 @@ import pygame
 import CubMaze
 import PlayerProcess
 import CubPaws
+import EnemyProcess
+
 
 class CubChase(QWidget):
     def __init__(self):
@@ -22,6 +24,10 @@ class CubChase(QWidget):
         self.screen = None
         self.playerOne = None
         self.playerTwo = None
+        self.enemyOne = None
+        self.enemyTwo = None
+        self.playerOneFinished = False
+        self.playerTwoFinished = False
 
         self.windowWidth = 640
         self.windowHeight = 480
@@ -29,6 +35,12 @@ class CubChase(QWidget):
         self.y = Value('i', 210)
         self.x2 = Value('i', 237)
         self.y2 = Value('i', 210)
+        self.ex1 = Value('i', 437)
+        self.ey1 = Value('i', 390)
+        self.ex2 = Value('i', 175)
+        self.ey2 = Value('i', 390)
+        self.life1 = Value('i', 3)
+        self.life2 = Value('i', 3)
         self.width = 25
         self.height = 25
         self.vel = 3
@@ -111,18 +123,27 @@ class CubChase(QWidget):
         self._background = pygame.image.load("grass.jpg").convert()
         self.playerOne = pygame.image.load('simba.png')
         self.playerTwo = pygame.image.load('Nalaa.png')
+        self.enemyOne = pygame.image.load('timon.png')
+        self.enemyTwo = pygame.image.load('pumbaa.png')
         self.on_render()
 
         q1input = Queue()
         q2input = Queue()
         quit_queue = Queue()
 
-        p1 = Process(target=PlayerProcess.player_function, args=(self.x, self.y, q1input, quit_queue, ))
-        p2 = Process(target=PlayerProcess.player_function, args=(self.x2, self.y2, q2input, quit_queue, ))
+        p1 = Process(target=PlayerProcess.player_function, args=(self.x, self.y, q1input, quit_queue))
+        p2 = Process(target=PlayerProcess.player_function, args=(self.x2, self.y2, q2input, quit_queue))
+        p3 = Process(target=EnemyProcess.move_enemy, args=(self.ex1, self.ey1, self.x, self.y, self.x2, self.y2,
+                                                           quit_queue, self.life1, self.life2))
+        p4 = Process(target=EnemyProcess.move_enemy, args=(self.ex2, self.ey2, self.x2, self.y2, self.x, self.y,
+                                                           quit_queue, self.life2, self.life1))
         p1.start()
         p2.start()
-        do = True
-        while do:
+        p3.start()
+        p4.start()
+        #do = True
+
+        while not self.playerOneFinished or not self.playerTwoFinished:
             pygame.time.delay(30)
 
             for event in pygame.event.get():
@@ -132,27 +153,32 @@ class CubChase(QWidget):
 
             keys = pygame.key.get_pressed()
 
-            if keys[pygame.K_LEFT]:
-                q1input.put(1)
-            if keys[pygame.K_RIGHT]:
-                q1input.put(2)
-            if keys[pygame.K_UP]:
-                q1input.put(3)
-            if keys[pygame.K_DOWN]:
-                q1input.put(4)
-            if keys[pygame.K_a]:
-                q2input.put(1)
-            if keys[pygame.K_d]:
-                q2input.put(2)
-            if keys[pygame.K_w]:
-                q2input.put(3)
-            if keys[pygame.K_s]:
-                q2input.put(4)
+            if not self.playerOneFinished:
+                if keys[pygame.K_LEFT]:
+                    q1input.put(1)
+                if keys[pygame.K_RIGHT]:
+                    q1input.put(2)
+                if keys[pygame.K_UP]:
+                    q1input.put(3)
+                if keys[pygame.K_DOWN]:
+                    q1input.put(4)
+
+            if not self.playerTwoFinished:
+                if keys[pygame.K_a]:
+                    q2input.put(1)
+                if keys[pygame.K_d]:
+                    q2input.put(2)
+                if keys[pygame.K_w]:
+                    q2input.put(3)
+                if keys[pygame.K_s]:
+                    q2input.put(4)
 
             self.redraw_window()
 
         p1.join()
         p2.join()
+        p3.join()
+        p4.join()
         pygame.quit()
 
     def on_render(self):
@@ -161,6 +187,8 @@ class CubChase(QWidget):
         self.maze.draw(self._display_surf, self._block_surf)
         self.screen.blit(self.playerOne, (self.x.value, self.y.value))
         self.screen.blit(self.playerTwo, (self.x2.value, self.y2.value))
+        self.screen.blit(self.enemyOne, (self.ex1.value, self.ey1.value))
+        self.screen.blit(self.enemyTwo, (self.ex2.value, self.ey2.value))
         pygame.display.flip()
 
     def redraw_window(self):
@@ -171,6 +199,15 @@ class CubChase(QWidget):
         self.paws2.draw(self._display_surf, self._paws_image2)
         self.screen.blit(self.playerOne, (self.x.value, self.y.value))
         self.screen.blit(self.playerTwo, (self.x2.value, self.y2.value))
+        self.screen.blit(self.enemyOne, (self.ex1.value, self.ey1.value))
+        self.screen.blit(self.enemyTwo, (self.ex2.value, self.ey2.value))
+
+        if self.life1.value == 0:
+            self.playerOneFinished = True
+            #self.p1.terminate()
+        if self.life2.value == 0:
+            self.playerTwoFinished = True
+            #self.p2.terminate()
         pygame.display.update()
 
     def check_paws(self):
@@ -205,6 +242,7 @@ class CubChase(QWidget):
         if val111 == 0 and val112 == 0 and val113 == 0 and val114 == 0 and val121 == 0 and val122 == 0 and val123 == 0 \
                 and val124 == 0:
             self.paws2.set_value(mx1, my1)
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

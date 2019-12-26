@@ -28,6 +28,7 @@ class CubChase(QWidget):
         self.enemyTwo = None
         self.playerOneFinished = False
         self.playerTwoFinished = False
+        self._zamka = None
 
         self.windowWidth = 640
         self.windowHeight = 480
@@ -125,6 +126,7 @@ class CubChase(QWidget):
         self.playerTwo = pygame.image.load('Nalaa.png')
         self.enemyOne = pygame.image.load('timon.png')
         self.enemyTwo = pygame.image.load('pumbaa.png')
+        self._zamka = pygame.image.load("zamka.png")
         self.on_render()
 
         q1input = Queue()
@@ -184,7 +186,7 @@ class CubChase(QWidget):
     def on_render(self):
         self.screen = pygame.display.set_mode((self.windowWidth, self.windowHeight))
         self.screen.blit(self._background, [0, 0])
-        self.maze.draw(self._display_surf, self._block_surf)
+        self.maze.draw(self._display_surf, self._block_surf, self._zamka)
         self.screen.blit(self.playerOne, (self.x.value, self.y.value))
         self.screen.blit(self.playerTwo, (self.x2.value, self.y2.value))
         self.screen.blit(self.enemyOne, (self.ex1.value, self.ey1.value))
@@ -194,7 +196,7 @@ class CubChase(QWidget):
     def redraw_window(self):
         self.check_paws()
         self.screen.blit(self._background, [0, 0])
-        self.maze.draw(self._display_surf, self._block_surf)
+        self.maze.draw(self._display_surf, self._block_surf, self._zamka)
         self.paws1.draw(self._display_surf, self._paws_image)
         self.paws2.draw(self._display_surf, self._paws_image2)
         self.screen.blit(self.playerOne, (self.x.value, self.y.value))

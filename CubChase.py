@@ -32,6 +32,7 @@ class CubChase(QWidget):
         self.playerOnePoints = 0
         self.playerTwoPoints = 0
         self._zamka = None
+        self._names = None
 
         self.windowWidth = 640
         self.windowHeight = 480
@@ -130,6 +131,9 @@ class CubChase(QWidget):
         self.enemyOne = pygame.image.load('timon.png')
         self.enemyTwo = pygame.image.load('pumbaa.png')
         self._zamka = pygame.image.load("zamka.png")
+        self._names = pygame.image.load("names.png")
+        self.name1 = self.txtbox1.text()
+        self.name2 = self.txtbox2.text()
 
         # inicijalizacija igraca i mape
         self.playerOneFinished = False
@@ -231,6 +235,21 @@ class CubChase(QWidget):
         self.screen.blit(self.playerTwo, (self.x2.value, self.y2.value))
         self.screen.blit(self.enemyOne, (self.ex1.value, self.ey1.value))
         self.screen.blit(self.enemyTwo, (self.ex2.value, self.ey2.value))
+        self.screen.blit(self._names, [0, 0])
+        font = pygame.font.Font('freesansbold.ttf', 12)
+        bg = (0, 0, 0)
+        black = (255, 255, 255)
+        text = font.render(self.name1, True, bg, black)
+        textRect = text.get_rect()
+        textRect.center = (50, 50)
+        self._display_surf.blit(text, textRect)
+
+        text2 = font.render(self.name2, True, bg, black)
+        textRect2 = text2.get_rect()
+        textRect2.center = (550, 50)
+        self._display_surf.blit(text2, textRect2)
+
+
         pygame.display.flip()
 
     def redraw_window(self):
@@ -243,6 +262,19 @@ class CubChase(QWidget):
         self.screen.blit(self.playerTwo, (self.x2.value, self.y2.value))
         self.screen.blit(self.enemyOne, (self.ex1.value, self.ey1.value))
         self.screen.blit(self.enemyTwo, (self.ex2.value, self.ey2.value))
+        self.screen.blit(self._names, [0, 0])
+        font = pygame.font.Font('freesansbold.ttf', 12)
+        bg = (0, 0, 0)
+        black = (255, 255, 255)
+        text = font.render(self.name1, True, bg, black)
+        textRect = text.get_rect()
+        textRect.center = (50, 50)
+        self._display_surf.blit(text, textRect)
+
+        text2 = font.render(self.name2, True, bg, black)
+        textRect2 = text2.get_rect()
+        textRect2.center = (550, 50)
+        self._display_surf.blit(text2, textRect2)
 
         if self.x.value > (640 - self.matW) and self.y.value > (480 - 2 * self.matH):
             self.playerOneFinished = True

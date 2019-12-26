@@ -43,6 +43,13 @@ class Paws:
     def set_value(self, x, y):
         self.matr[x + (y * self.M)] = 1
 
+    def get_score(self):
+        sum = 0
+        for i in range(0, self.M*self.N):
+            sum = sum + self.matr[i]
+        return sum * 100
+
+
     def reset(self):
         #pri prelasku na naredni nivo resetovati matricu
         self.matr = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,

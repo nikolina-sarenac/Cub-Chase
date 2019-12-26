@@ -2,12 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5f0a1f15-81cb-48ae-bd5d-bed934f7677a" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/result.jpg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/Cub-Chase.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Cub-Chase.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CubChase.py" beforeDir="false" afterPath="$PROJECT_DIR$/CubChase.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CubMaze.py" beforeDir="false" afterPath="$PROJECT_DIR$/CubMaze.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CubPaws.py" beforeDir="false" afterPath="$PROJECT_DIR$/CubPaws.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EnemyProcess.py" beforeDir="false" afterPath="$PROJECT_DIR$/EnemyProcess.py" afterDir="false" />
     </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -25,6 +28,18 @@
   <component name="PropertiesComponent">
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
   </component>
   <component name="RunManager">
     <configuration name="CubChase" type="PythonConfigurationType" factoryName="Python" temporary="true">
@@ -53,18 +68,6 @@
         <item itemvalue="Python.CubChase" />
       </list>
     </recent_temporary>
-  </component>
-  <component name="ServiceViewManager">
-    <option name="viewStates">
-      <list>
-        <serviceView>
-          <treeState>
-            <expand />
-            <select />
-          </treeState>
-        </serviceView>
-      </list>
-    </option>
   </component>
   <component name="SvnConfiguration">
     <configuration />

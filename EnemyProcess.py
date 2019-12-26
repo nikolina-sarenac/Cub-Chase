@@ -2,11 +2,10 @@ import CubMaze
 import pygame
 
 
-def move_enemy(xk, yk, player_x, player_y, other_player_x, other_player_y, q, life1, life2):
+def move_enemy(xk, yk, player_x, player_y, other_player_x, other_player_y, q, life1, life2, vel):
         run = True
         width = 25
         height = 25
-        vel = 1
         matW = 640 / 22
         matH = 480 / 16
         maze = CubMaze.Maze()

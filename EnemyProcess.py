@@ -56,10 +56,12 @@ def move_enemy(xk, yk, player_x, player_y, other_player_x, other_player_y, q, li
                 xk.value = x
             if x == player_x.value and y == player_y.value:
                 life1.value -= 1
-                #player_x.value = 379
-                #player_y.value = 210
+                pygame.time.delay(3000)
+                # player_x.value = 379
+                # player_y.value = 210
             if x == other_player_x.value and y == other_player_y.value:
                 life2.value -= 1
-                #other_player_x.value = 237
-                #other_player_y.value = 210
+                pygame.time.delay(3000)
+                # other_player_x.value = 237
+                # other_player_y.value = 210
             pygame.time.wait(30)

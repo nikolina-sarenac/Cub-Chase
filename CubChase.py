@@ -158,8 +158,8 @@ class CubChase(QWidget):
                                                            quit_queue, self.life2, self.life1, self.enemyVel))
         p1.start()
         p2.start()
-        # p3.start()
-        # p4.start()
+        p3.start()
+        p4.start()
         quit = False
         while not self.playerOneFinished or not self.playerTwoFinished:
             pygame.time.delay(30)
@@ -197,8 +197,8 @@ class CubChase(QWidget):
 
         p1.kill()
         p2.kill()
-        # p3.kill()
-        # p4.kill()
+        p3.kill()
+        p4.kill()
         if not quit:
             pygame.time.delay(1000)
             self.showResults()
@@ -210,8 +210,8 @@ class CubChase(QWidget):
         white=(255,255,255)
         pygame.draw.rect(self._display_surf, white, (300, 200, 40, 50))
         pygame.display.update()
-        self.playerOnePoints = self.paws1.get_score()
-        self.playerTwoPoints = self.paws2.get_score()
+        self.playerTwoPoints = self.paws1.get_score()
+        self.playerOnePoints = self.paws2.get_score()
         self.enemyVel = self.enemyVel + 1
         wait = True
         while wait:
@@ -240,7 +240,7 @@ class CubChase(QWidget):
         bg = (0, 0, 0)
         black = (255, 255, 255)
         text = font.render(self.name1, True, bg, black)
-        result = font.render(str(self.playerOnePoints), True, bg, black)
+        result = font.render(str(self.playerTwoPoints), True, bg, black)
         textRect = text.get_rect()
         resRect = result.get_rect()
         textRect.center = (50, 50)
@@ -249,7 +249,7 @@ class CubChase(QWidget):
         self._display_surf.blit(result, resRect)
 
         text2 = font.render(self.name2, True, bg, black)
-        result2 = font.render(str(self.playerTwoPoints), True, bg, black)
+        result2 = font.render(str(self.playerOnePoints), True, bg, black)
         textRect2 = text2.get_rect()
         res2Rect = result2.get_rect()
         textRect2.center = (550, 50)
@@ -275,8 +275,9 @@ class CubChase(QWidget):
         font = pygame.font.Font('freesansbold.ttf', 12)
         bg = (0, 0, 0)
         black = (255, 255, 255)
+
         text = font.render(self.name1, True, bg, black)
-        result = font.render(str(self.playerOnePoints), True, bg, black)
+        result = font.render(str(self.playerTwoPoints), True, bg, black)
         textRect = text.get_rect()
         resRect = result.get_rect()
         textRect.center = (50, 50)
@@ -285,7 +286,7 @@ class CubChase(QWidget):
         self._display_surf.blit(result, resRect)
 
         text2 = font.render(self.name2, True, bg, black)
-        result2 = font.render(str(self.playerTwoPoints), True, bg, black)
+        result2 = font.render(str(self.playerOnePoints), True, bg, black)
         textRect2 = text2.get_rect()
         res2Rect = result2.get_rect()
         textRect2.center = (550, 50)

@@ -52,6 +52,9 @@ class CubChase(QWidget):
         self.matW = 640 / 22
         self.matH = 480 / 16
         self.run = True
+        self.player_one_dead = False
+        self.player_two_dead = False
+        self.game_finished = False
 
         self.initUI()
 
@@ -158,8 +161,8 @@ class CubChase(QWidget):
                                                            quit_queue, self.life2, self.life1, self.enemyVel))
         p1.start()
         p2.start()
-        # p3.start()
-        # p4.start()
+        p3.start()
+        p4.start()
         quit = False
         while not self.playerOneFinished or not self.playerTwoFinished:
             pygame.time.delay(30)
@@ -173,7 +176,7 @@ class CubChase(QWidget):
 
             keys = pygame.key.get_pressed()
 
-            if not self.playerOneFinished:
+            if not self.player_one_dead:
                 if keys[pygame.K_LEFT]:
                     q1input.put(1)
                 if keys[pygame.K_RIGHT]:
@@ -183,7 +186,7 @@ class CubChase(QWidget):
                 if keys[pygame.K_DOWN]:
                     q1input.put(4)
 
-            if not self.playerTwoFinished:
+            if not self.player_two_dead:
                 if keys[pygame.K_a]:
                     q2input.put(1)
                 if keys[pygame.K_d]:
@@ -197,17 +200,19 @@ class CubChase(QWidget):
 
         p1.kill()
         p2.kill()
-        # p3.kill()
-        # p4.kill()
-        if not quit:
+        p3.kill()
+        p4.kill()
+        if not quit and not self.game_finished:
             pygame.time.delay(1000)
             self.showResults()
+        if self.game_finished:
+            self.showGameOver()
         pygame.quit()
 
     def showResults(self):
         self._backgroundResult = pygame.image.load("result.jpg")
         self.screen.blit(self._backgroundResult, [0, 0])
-        white=(255,255,255)
+        white = (255, 255, 255)
         pygame.draw.rect(self._display_surf, white, (300, 200, 40, 50))
         pygame.display.update()
         self.playerOnePoints = self.paws1.get_score()
@@ -226,6 +231,17 @@ class CubChase(QWidget):
                         wait = False
 
         self.showMaze()
+
+    def showGameOver(self):
+        self._backgroundResult = pygame.image.load("result.jpg")
+        self.screen.blit(self._backgroundResult, [0, 0])
+        pygame.display.update()
+        wait = True
+        while wait:
+            mouse = pygame.mouse.get_pos()
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    wait = False
 
     def on_render(self):
         self.screen = pygame.display.set_mode((self.windowWidth, self.windowHeight))
@@ -265,8 +281,13 @@ class CubChase(QWidget):
         self.maze.draw(self._display_surf, self._block_surf, self._zamka)
         self.paws1.draw(self._display_surf, self._paws_image)
         self.paws2.draw(self._display_surf, self._paws_image2)
-        self.screen.blit(self.playerOne, (self.x.value, self.y.value))
-        self.screen.blit(self.playerTwo, (self.x2.value, self.y2.value))
+
+        if not self.player_one_dead:
+            self.screen.blit(self.playerOne, (self.x.value, self.y.value))
+
+        if not self.player_two_dead:
+            self.screen.blit(self.playerTwo, (self.x2.value, self.y2.value))
+
         self.screen.blit(self.enemyOne, (self.ex1.value, self.ey1.value))
         self.screen.blit(self.enemyTwo, (self.ex2.value, self.ey2.value))
         self.screen.blit(self._names, [0, 0])
@@ -299,11 +320,15 @@ class CubChase(QWidget):
             self.playerTwoFinished = True
 
         if self.life1.value == 0:
+            self.player_one_dead = True
             self.playerOneFinished = True
-            #self.p1.terminate()
         if self.life2.value == 0:
+            self.player_two_dead = True
             self.playerTwoFinished = True
-            #self.p2.terminate()
+
+        if self.player_one_dead and self.player_two_dead:
+            self.game_finished = True
+
         pygame.display.update()
 
     def check_paws(self):
@@ -320,7 +345,7 @@ class CubChase(QWidget):
         val123 = self.paws2.get_value(mx2, my1)
         val124 = self.paws2.get_value(mx2, my2)
         if val111 == 0 and val112 == 0 and val113 == 0 and val114 == 0 and val121 == 0 and val122 == 0 and val123 == 0 \
-                and val124 == 0:
+                and val124 == 0 and self.life1.value > 0:
             self.paws1.set_value(mx1, my1)
 
         mx1 = int(self.x2.value // self.matW)
@@ -336,7 +361,7 @@ class CubChase(QWidget):
         val123 = self.paws2.get_value(mx2, my1)
         val124 = self.paws2.get_value(mx2, my2)
         if val111 == 0 and val112 == 0 and val113 == 0 and val114 == 0 and val121 == 0 and val122 == 0 and val123 == 0 \
-                and val124 == 0:
+                and val124 == 0 and self.life2.value > 0:
             self.paws2.set_value(mx1, my1)
 
 

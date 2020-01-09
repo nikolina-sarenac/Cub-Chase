@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import (QWidget, QHBoxLayout, QLabel, QApplication, QPushBu
 from PyQt5.QtCore import (Qt, QSize)
 from PyQt5.QtGui import (QPixmap, QIcon)
 from multiprocessing import Process, Queue, Value
+import threading
 import sys
 import pygame
 import CubMaze
@@ -31,8 +32,13 @@ class CubChase(QWidget):
         self.playerTwoFinished = False
         self.playerOnePoints = 0
         self.playerTwoPoints = 0
+        self.playerOneTotal = 0
+        self.playerTwoTotal = 0
         self._zamka = None
         self._names = None
+        self._board = None
+        self._life = None
+        self.add_force = False
 
         self.windowWidth = 640
         self.windowHeight = 480
@@ -41,17 +47,22 @@ class CubChase(QWidget):
         self.x2 = Value('i', 237)
         self.y2 = Value('i', 210)
         self.ex1 = Value('i', 437)
-        self.ey1 = Value('i', 390)
+        self.ey1 = Value('i', 420)
         self.ex2 = Value('i', 175)
-        self.ey2 = Value('i', 390)
+        self.ey2 = Value('i', 420)
         self.life1 = Value('i', 3)
         self.life2 = Value('i', 3)
+        self.EnemyChase1 = Value('i', 1)
+        self.EnemyChase2 = Value('i', 1)
         self.width = 25
         self.height = 25
         self.enemyVel = 1
         self.matW = 640 / 22
         self.matH = 480 / 16
         self.run = True
+        self.player_one_dead = False
+        self.player_two_dead = False
+        self.game_finished = False
 
         self.initUI()
 
@@ -72,14 +83,14 @@ class CubChase(QWidget):
 
         self.txtbox1 = QLineEdit(self)
         self.txtbox1.move(228, 315)
-        self.txtbox1.resize(93, 23)
+        self.txtbox1.resize(96, 23)
         self.txtbox1.setStyleSheet('background-color: #f5deb3; border: 2px solid teal; font: Bold')
         self.txtbox1.setAlignment(Qt.AlignCenter)
         self.txtbox1.setVisible(False)
 
         self.txtbox2 = QLineEdit(self)
         self.txtbox2.move(344, 315)
-        self.txtbox2.resize(93, 23)
+        self.txtbox2.resize(100, 23)
         self.txtbox2.setStyleSheet('background-color: #f5deb3; border: 2px solid teal; font: Bold')
         self.txtbox2.setAlignment(Qt.AlignCenter)
         self.txtbox2.setVisible(False)
@@ -116,6 +127,9 @@ class CubChase(QWidget):
         self.btn1.clicked.connect(self.showMaze)
         self.show()
 
+    def timer_stopped(self):
+        self.add_force = True
+
     def showMaze(self):
         self.hide()
         pygame.init()
@@ -132,6 +146,8 @@ class CubChase(QWidget):
         self.enemyTwo = pygame.image.load('pumbaa.png')
         self._zamka = pygame.image.load("zamka.png")
         self._names = pygame.image.load("names.png")
+        self._board = pygame.image.load("daska.png")
+        self._life = pygame.image.load("life.png")
         self.name1 = self.txtbox1.text()
         self.name2 = self.txtbox2.text()
 
@@ -142,8 +158,12 @@ class CubChase(QWidget):
         self.y = Value('i', 210)
         self.x2 = Value('i', 237)
         self.y2 = Value('i', 210)
+        self.EnemyChase1.value = 1
+        self.EnemyChase2.value = 1
         self.paws1.reset()
         self.paws2.reset()
+        self.life1.value = 3
+        self.life2.value = 3
         self.on_render()
 
         q1input = Queue()
@@ -153,16 +173,20 @@ class CubChase(QWidget):
         p1 = Process(target=PlayerProcess.player_function, args=(self.x, self.y, q1input, quit_queue))
         p2 = Process(target=PlayerProcess.player_function, args=(self.x2, self.y2, q2input, quit_queue))
         p3 = Process(target=EnemyProcess.move_enemy, args=(self.ex1, self.ey1, self.x, self.y, self.x2, self.y2,
-                                                           quit_queue, self.life1, self.life2, self.enemyVel))
+                                                           quit_queue, self.life1, self.life2, self.enemyVel,
+                                                           self.EnemyChase1))
         p4 = Process(target=EnemyProcess.move_enemy, args=(self.ex2, self.ey2, self.x2, self.y2, self.x, self.y,
-                                                           quit_queue, self.life2, self.life1, self.enemyVel))
+                                                           quit_queue, self.life2, self.life1, self.enemyVel,
+                                                           self.EnemyChase2))
         p1.start()
         p2.start()
         p3.start()
         p4.start()
         quit = False
+        timer = threading.Timer(10.0, self.timer_stopped)
+        timer.start()
         while not self.playerOneFinished or not self.playerTwoFinished:
-            pygame.time.delay(30)
+            pygame.time.delay(40)
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -173,7 +197,7 @@ class CubChase(QWidget):
 
             keys = pygame.key.get_pressed()
 
-            if not self.playerOneFinished:
+            if not self.player_one_dead:
                 if keys[pygame.K_LEFT]:
                     q1input.put(1)
                 if keys[pygame.K_RIGHT]:
@@ -183,7 +207,7 @@ class CubChase(QWidget):
                 if keys[pygame.K_DOWN]:
                     q1input.put(4)
 
-            if not self.playerTwoFinished:
+            if not self.player_two_dead:
                 if keys[pygame.K_a]:
                     q2input.put(1)
                 if keys[pygame.K_d]:
@@ -193,29 +217,37 @@ class CubChase(QWidget):
                 if keys[pygame.K_s]:
                     q2input.put(4)
 
+            if self.life2.value == 0:
+                p1.kill()
+            if self.life1.value == 0:
+                p2.kill()
             self.redraw_window()
 
+        self.playerOneTotal += self.playerOnePoints
+        self.playerTwoTotal += self.playerTwoPoints
         p1.kill()
         p2.kill()
         p3.kill()
         p4.kill()
-        if not quit:
+        if not quit and not self.game_finished:
             pygame.time.delay(1000)
             self.showResults()
+        if self.game_finished:
+            self.showGameOver()
         pygame.quit()
 
     def showResults(self):
         self._backgroundResult = pygame.image.load("result.jpg")
         self.screen.blit(self._backgroundResult, [0, 0])
-        white=(255,255,255)
+        white = (255, 255, 255)
         pygame.draw.rect(self._display_surf, white, (300, 200, 40, 50))
         pygame.display.update()
         self.playerTwoPoints = self.paws1.get_score()
         self.playerOnePoints = self.paws2.get_score()
-        self.enemyVel = self.enemyVel + 1
+        if self.enemyVel < 4:
+            self.enemyVel = self.enemyVel + 1
         wait = True
         while wait:
-            mouse = pygame.mouse.get_pos()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     wait = False
@@ -227,36 +259,61 @@ class CubChase(QWidget):
 
         self.showMaze()
 
+    def showGameOver(self):
+        self._backgroundResult = pygame.image.load("result.jpg")
+        self.screen.blit(self._backgroundResult, [0, 0])
+        pygame.display.update()
+        wait = True
+        while wait:
+            mouse = pygame.mouse.get_pos()
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    wait = False
+
     def on_render(self):
         self.screen = pygame.display.set_mode((self.windowWidth, self.windowHeight))
         self.screen.blit(self._background, [0, 0])
         self.maze.draw(self._display_surf, self._block_surf, self._zamka)
-        self.screen.blit(self.playerOne, (self.x.value, self.y.value))
-        self.screen.blit(self.playerTwo, (self.x2.value, self.y2.value))
+        if self.life2.value > 0:
+            self.screen.blit(self.playerOne, (self.x.value, self.y.value))
+        if self.life1.value > 0:
+            self.screen.blit(self.playerTwo, (self.x2.value, self.y2.value))
         self.screen.blit(self.enemyOne, (self.ex1.value, self.ey1.value))
         self.screen.blit(self.enemyTwo, (self.ex2.value, self.ey2.value))
-        self.screen.blit(self._names, [0, 0])
+
+        # ispis za ime, poene i zivote igraca
+        self.screen.blit(self._board, [5, 5])
+        self.screen.blit(self._board, [480, 5])
         font = pygame.font.Font('freesansbold.ttf', 12)
-        bg = (0, 0, 0)
+
         black = (255, 255, 255)
-        text = font.render(self.name1, True, bg, black)
-        result = font.render(str(self.playerTwoPoints), True, bg, black)
+        text = font.render(self.name1, True, black)
+        result = font.render(str(self.playerTwoPoints), True, black)
         textRect = text.get_rect()
         resRect = result.get_rect()
-        textRect.center = (50, 50)
-        resRect.center = (50, 70)
+        textRect.center = (70, 35)
+        resRect.center = (70, 55)
         self._display_surf.blit(text, textRect)
         self._display_surf.blit(result, resRect)
 
-        text2 = font.render(self.name2, True, bg, black)
-        result2 = font.render(str(self.playerOnePoints), True, bg, black)
+        text2 = font.render(self.name2, True, black)
+        result2 = font.render(str(self.playerOnePoints), True, black)
         textRect2 = text2.get_rect()
         res2Rect = result2.get_rect()
-        textRect2.center = (550, 50)
-        res2Rect.center = (550, 70)
+        textRect2.center = (550, 35)
+        res2Rect.center = (550, 55)
         self._display_surf.blit(text2, textRect2)
         self._display_surf.blit(result2, res2Rect)
 
+        xl = 35
+        yl = 65
+        for i in range(0, self.life1.value):
+            self._display_surf.blit(self._life, [xl, yl])
+            xl = xl + 25
+        xl = 515
+        for i in range(0, self.life2.value):
+            self._display_surf.blit(self._life, [xl, yl])
+            xl = xl + 25
         pygame.display.flip()
 
     def redraw_window(self):
@@ -265,46 +322,73 @@ class CubChase(QWidget):
         self.maze.draw(self._display_surf, self._block_surf, self._zamka)
         self.paws1.draw(self._display_surf, self._paws_image)
         self.paws2.draw(self._display_surf, self._paws_image2)
-        self.screen.blit(self.playerOne, (self.x.value, self.y.value))
-        self.screen.blit(self.playerTwo, (self.x2.value, self.y2.value))
+
+        if not self.player_one_dead:
+            self.screen.blit(self.playerOne, (self.x.value, self.y.value))
+
+        if not self.player_two_dead:
+            self.screen.blit(self.playerTwo, (self.x2.value, self.y2.value))
+
         self.screen.blit(self.enemyOne, (self.ex1.value, self.ey1.value))
         self.screen.blit(self.enemyTwo, (self.ex2.value, self.ey2.value))
-        self.screen.blit(self._names, [0, 0])
+        self.screen.blit(self._board, [5, 5])
+        self.screen.blit(self._board, [480, 5])
         self.playerOnePoints = self.paws1.get_score()
         self.playerTwoPoints = self.paws2.get_score()
         font = pygame.font.Font('freesansbold.ttf', 12)
-        bg = (0, 0, 0)
         black = (255, 255, 255)
 
-        text = font.render(self.name1, True, bg, black)
-        result = font.render(str(self.playerTwoPoints), True, bg, black)
+        text = font.render(self.name1, True, black)
+        result = font.render(str(self.playerTwoPoints), True, black)
         textRect = text.get_rect()
         resRect = result.get_rect()
-        textRect.center = (50, 50)
-        resRect.center = (50, 70)
+        textRect.center = (70, 35)
+        resRect.center = (70, 55)
         self._display_surf.blit(text, textRect)
         self._display_surf.blit(result, resRect)
-
-        text2 = font.render(self.name2, True, bg, black)
-        result2 = font.render(str(self.playerOnePoints), True, bg, black)
+        text2 = font.render(self.name2, True, black)
+        result2 = font.render(str(self.playerOnePoints), True, black)
         textRect2 = text2.get_rect()
         res2Rect = result2.get_rect()
-        textRect2.center = (550, 50)
-        res2Rect.center = (550, 70)
+        textRect2.center = (550, 35)
+        res2Rect.center = (550, 55)
         self._display_surf.blit(text2, textRect2)
         self._display_surf.blit(result2, res2Rect)
 
-        if self.x.value > (640 - self.matW) and self.y.value > (480 - 2 * self.matH):
-            self.playerOneFinished = True
-        if self.x2.value > (640 - self.matW) and self.y2.value > (480 - 2 * self.matH):
-            self.playerTwoFinished = True
+        xl = 35
+        yl = 65
+        for i in range(0, self.life1.value):
+            self._display_surf.blit(self._life, [xl, yl])
+            xl = xl + 25
+        xl = 515
+        for i in range(0, self.life2.value):
+            self._display_surf.blit(self._life, [xl, yl])
+            xl = xl + 25
 
-        if self.life1.value == 0:
-            self.playerOneFinished = True
-            #self.p1.terminate()
+        total = self.maze.get_total()
+        if (self.paws1.get_score() + self.paws2.get_score()) == total:
+            if self.x.value > (640 - self.matW) and self.y.value > (480 - 2 * self.matH):
+                self.playerOneFinished = True
+                self.EnemyChase1.value = 0
+            if self.x2.value > (640 - self.matW) and self.y2.value > (480 - 2 * self.matH):
+                self.playerTwoFinished = True
+                self.EnemyChase2.value = 0
+
         if self.life2.value == 0:
+            self.playerOneFinished = True
+            # self.p1.terminate()
+        if self.life1.value == 0:
             self.playerTwoFinished = True
-            #self.p2.terminate()
+            # self.p2.terminate()
+
+        if self.add_force:
+            self._display_surf.blit(self._life, [307, 303])
+            if 303 < self.x.value < 335 and 300 < self.y.value < 330:
+                self.life2.value = self.life2.value + 1
+                self.add_force = False
+            elif 303 < self.x2.value < 335 and 300 < self.y2.value < 330:
+                self.life1.value = self.life1.value + 1
+                self.add_force = False
         pygame.display.update()
 
     def check_paws(self):
@@ -321,7 +405,7 @@ class CubChase(QWidget):
         val123 = self.paws2.get_value(mx2, my1)
         val124 = self.paws2.get_value(mx2, my2)
         if val111 == 0 and val112 == 0 and val113 == 0 and val114 == 0 and val121 == 0 and val122 == 0 and val123 == 0 \
-                and val124 == 0:
+                and val124 == 0 and self.life1.value > 0:
             self.paws1.set_value(mx1, my1)
 
         mx1 = int(self.x2.value // self.matW)
@@ -337,7 +421,7 @@ class CubChase(QWidget):
         val123 = self.paws2.get_value(mx2, my1)
         val124 = self.paws2.get_value(mx2, my2)
         if val111 == 0 and val112 == 0 and val113 == 0 and val114 == 0 and val121 == 0 and val122 == 0 and val123 == 0 \
-                and val124 == 0:
+                and val124 == 0 and self.life2.value > 0:
             self.paws2.set_value(mx1, my1)
 
 

@@ -34,11 +34,13 @@ class CubChase(QWidget):
         self.playerTwoPoints = 0
         self.playerOneTotal = 0
         self.playerTwoTotal = 0
-        self._zamka = None
+        self._trap = None
         self._names = None
         self._board = None
         self._life = None
         self.add_force = False
+        self.add_trap1 = True
+        self.add_trap2 = True
 
         self.windowWidth = 640
         self.windowHeight = 480
@@ -130,6 +132,12 @@ class CubChase(QWidget):
     def timer_stopped(self):
         self.add_force = True
 
+    def timer_trap1(self):
+        self.add_trap1 = False
+
+    def timer_trap2(self):
+        self.add_trap2 = False
+
     def showMaze(self):
         self.hide()
         pygame.init()
@@ -144,7 +152,7 @@ class CubChase(QWidget):
         self.playerTwo = pygame.image.load('Nalaa.png')
         self.enemyOne = pygame.image.load('timon.png')
         self.enemyTwo = pygame.image.load('pumbaa.png')
-        self._zamka = pygame.image.load("zamka.png")
+        self._trap = pygame.image.load("zamka.png")
         self._names = pygame.image.load("names.png")
         self._board = pygame.image.load("daska.png")
         self._life = pygame.image.load("life.png")
@@ -273,7 +281,7 @@ class CubChase(QWidget):
     def on_render(self):
         self.screen = pygame.display.set_mode((self.windowWidth, self.windowHeight))
         self.screen.blit(self._background, [0, 0])
-        self.maze.draw(self._display_surf, self._block_surf, self._zamka)
+        self.maze.draw(self._display_surf, self._block_surf, self._trap)
         if self.life2.value > 0:
             self.screen.blit(self.playerOne, (self.x.value, self.y.value))
         if self.life1.value > 0:
@@ -319,7 +327,7 @@ class CubChase(QWidget):
     def redraw_window(self):
         self.check_paws()
         self.screen.blit(self._background, [0, 0])
-        self.maze.draw(self._display_surf, self._block_surf, self._zamka)
+        self.maze.draw(self._display_surf, self._block_surf, self._trap)
         self.paws1.draw(self._display_surf, self._paws_image)
         self.paws2.draw(self._display_surf, self._paws_image2)
 
@@ -384,11 +392,37 @@ class CubChase(QWidget):
         if self.add_force:
             self._display_surf.blit(self._life, [307, 303])
             if 303 < self.x.value < 335 and 300 < self.y.value < 330:
-                self.life2.value = self.life2.value + 1
-                self.add_force = False
-            elif 303 < self.x2.value < 335 and 300 < self.y2.value < 330:
                 self.life1.value = self.life1.value + 1
                 self.add_force = False
+            elif 303 < self.x2.value < 335 and 300 < self.y2.value < 330:
+                self.life2.value = self.life2.value + 1
+                self.add_force = False
+
+        #kad neprijatelj dodirne zamku, bude aktivan jos 10 sekundi i onda nestane
+        if self.add_trap1:
+            self._display_surf.blit(self._trap, [87, 95])
+            if 87 < self.x.value < 112 and 95 < self.y.value < 120:
+                timer_t1 = threading.Timer(10.0, self.timer_trap1)
+                timer_t1.start()
+                self.add_trap1 = True
+
+            elif 87 < self.x2.value < 112 and 95 < self.y2.value < 120:
+                timer_t1 = threading.Timer(10.0, self.timer_trap1)
+                timer_t1.start()
+                self.add_trap1 = True
+
+        if self.add_trap2:
+            self._display_surf.blit(self._trap, [467, 422])
+            if 455 < self.x.value < 480 and 410 < self.y.value < 435:
+                timer_t2 = threading.Timer(10.0, self.timer_trap2)
+                timer_t2.start()
+                self.add_trap2 = True
+
+            elif 455 < self.x2.value < 480 and 410 < self.y2.value < 435:
+                timer_t2 = threading.Timer(10.0, self.timer_trap2)
+                timer_t2.start()
+                self.add_trap2 = True
+
         pygame.display.update()
 
     def check_paws(self):

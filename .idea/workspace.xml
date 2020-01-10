@@ -2,14 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5f0a1f15-81cb-48ae-bd5d-bed934f7677a" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/daska.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/life.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/Cub-Chase.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Cub-Chase.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CubChase.py" beforeDir="false" afterPath="$PROJECT_DIR$/CubChase.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CubMaze.py" beforeDir="false" afterPath="$PROJECT_DIR$/CubMaze.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EnemyProcess.py" beforeDir="false" afterPath="$PROJECT_DIR$/EnemyProcess.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/zamka.png" beforeDir="false" afterPath="$PROJECT_DIR$/zamka.png" afterDir="false" />
     </list>
-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -25,20 +24,8 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$USER_HOME$/Desktop/Cub-Chase" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
-  </component>
-  <component name="RunDashboard">
-    <option name="ruleStates">
-      <list>
-        <RuleState>
-          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
-        </RuleState>
-        <RuleState>
-          <option name="name" value="StatusDashboardGroupingRule" />
-        </RuleState>
-      </list>
-    </option>
   </component>
   <component name="RunManager">
     <configuration name="CubChase" type="PythonConfigurationType" factoryName="Python" temporary="true">
@@ -67,6 +54,18 @@
         <item itemvalue="Python.CubChase" />
       </list>
     </recent_temporary>
+  </component>
+  <component name="ServiceViewManager">
+    <option name="viewStates">
+      <list>
+        <serviceView>
+          <treeState>
+            <expand />
+            <select />
+          </treeState>
+        </serviceView>
+      </list>
+    </option>
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -99,33 +98,33 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="409" y="4" key="#CubChase/0.0.1366.728@0.0.1366.728" timestamp="1576842007285" />
-    <state x="463" y="120" key="FileChooserDialogImpl" timestamp="1577217140095">
+    <state x="463" y="120" key="FileChooserDialogImpl" timestamp="1578617818335">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="463" y="120" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1577217140095" />
-    <state width="1344" height="174" key="GridCell.Tab.0.bottom" timestamp="1577319075037">
+    <state x="463" y="120" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1578617818335" />
+    <state width="1344" height="174" key="GridCell.Tab.0.bottom" timestamp="1578665358888">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1344" height="174" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1577319075037" />
-    <state width="1344" height="174" key="GridCell.Tab.0.center" timestamp="1577319075036">
+    <state width="1344" height="174" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1578665358887" />
+    <state width="1344" height="174" key="GridCell.Tab.0.center" timestamp="1578665358885">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1344" height="174" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1577319075036" />
-    <state width="1344" height="174" key="GridCell.Tab.0.left" timestamp="1577319075036">
+    <state width="1344" height="174" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1578665358885" />
+    <state width="1344" height="174" key="GridCell.Tab.0.left" timestamp="1578665358885">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1344" height="174" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1577319075036" />
-    <state width="1344" height="174" key="GridCell.Tab.0.right" timestamp="1577319075037">
+    <state width="1344" height="174" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1578665358882" />
+    <state width="1344" height="174" key="GridCell.Tab.0.right" timestamp="1578665358886">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1344" height="174" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1577319075037" />
-    <state x="186" y="0" key="SettingsEditor" timestamp="1576842064331">
+    <state width="1344" height="174" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1578665358886" />
+    <state x="186" y="0" key="SettingsEditor" timestamp="1578609902711">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="186" y="0" key="SettingsEditor/0.0.1366.728@0.0.1366.728" timestamp="1576842064331" />
-    <state x="390" y="190" key="com.intellij.ide.util.TipDialog" timestamp="1577217120881">
+    <state x="186" y="0" key="SettingsEditor/0.0.1366.728@0.0.1366.728" timestamp="1578609902711" />
+    <state x="390" y="190" key="com.intellij.ide.util.TipDialog" timestamp="1578617795089">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="390" y="190" key="com.intellij.ide.util.TipDialog/0.0.1366.728@0.0.1366.728" timestamp="1577217120881" />
+    <state x="390" y="190" key="com.intellij.ide.util.TipDialog/0.0.1366.728@0.0.1366.728" timestamp="1578617795089" />
   </component>
 </project>

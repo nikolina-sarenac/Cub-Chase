@@ -225,9 +225,9 @@ class CubChase(QWidget):
                 if keys[pygame.K_s]:
                     q2input.put(4)
 
-            if self.life2.value == 0:
-                p1.kill()
             if self.life1.value == 0:
+                p1.kill()
+            if self.life2.value == 0:
                 p2.kill()
             self.redraw_window()
 
@@ -282,9 +282,9 @@ class CubChase(QWidget):
         self.screen = pygame.display.set_mode((self.windowWidth, self.windowHeight))
         self.screen.blit(self._background, [0, 0])
         self.maze.draw(self._display_surf, self._block_surf, self._trap)
-        if self.life2.value > 0:
-            self.screen.blit(self.playerOne, (self.x.value, self.y.value))
         if self.life1.value > 0:
+            self.screen.blit(self.playerOne, (self.x.value, self.y.value))
+        if self.life2.value > 0:
             self.screen.blit(self.playerTwo, (self.x2.value, self.y2.value))
         self.screen.blit(self.enemyOne, (self.ex1.value, self.ey1.value))
         self.screen.blit(self.enemyTwo, (self.ex2.value, self.ey2.value))
@@ -315,11 +315,11 @@ class CubChase(QWidget):
 
         xl = 35
         yl = 65
-        for i in range(0, self.life1.value):
+        for i in range(0, self.life2.value):
             self._display_surf.blit(self._life, [xl, yl])
             xl = xl + 25
         xl = 515
-        for i in range(0, self.life2.value):
+        for i in range(0, self.life1.value):
             self._display_surf.blit(self._life, [xl, yl])
             xl = xl + 25
         pygame.display.flip()
@@ -365,11 +365,11 @@ class CubChase(QWidget):
 
         xl = 35
         yl = 65
-        for i in range(0, self.life1.value):
+        for i in range(0, self.life2.value):
             self._display_surf.blit(self._life, [xl, yl])
             xl = xl + 25
         xl = 515
-        for i in range(0, self.life2.value):
+        for i in range(0, self.life1.value):
             self._display_surf.blit(self._life, [xl, yl])
             xl = xl + 25
 
@@ -382,12 +382,16 @@ class CubChase(QWidget):
                 self.playerTwoFinished = True
                 self.EnemyChase2.value = 0
 
-        if self.life2.value == 0:
-            self.playerOneFinished = True
-            # self.p1.terminate()
         if self.life1.value == 0:
+            self.playerOneFinished = True
+            self.player_one_dead = True
+            # self.p1.terminate()
+        if self.life2.value == 0:
             self.playerTwoFinished = True
+            self.player_two_dead = True
             # self.p2.terminate()
+        if self.player_one_dead and self.player_two_dead:
+            self.game_finished = True
 
         if self.add_force:
             self._display_surf.blit(self._life, [307, 303])

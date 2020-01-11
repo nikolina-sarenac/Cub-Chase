@@ -56,6 +56,8 @@ class CubChase(QWidget):
         self.life2 = Value('i', 3)
         self.EnemyChase1 = Value('i', 1)
         self.EnemyChase2 = Value('i', 1)
+        self.cought1 = Value('i', 0)
+        self.cought2 = Value('i', 0)
         self.width = 25
         self.height = 25
         self.enemyVel = 1
@@ -162,10 +164,10 @@ class CubChase(QWidget):
         # inicijalizacija igraca i mape
         self.playerOneFinished = False
         self.playerTwoFinished = False
-        self.x = Value('i', 379)
-        self.y = Value('i', 210)
-        self.x2 = Value('i', 237)
-        self.y2 = Value('i', 210)
+        self.x.value = 379
+        self.y.value = 210
+        self.x2.value = 237
+        self.y2.value = 210
         self.EnemyChase1.value = 1
         self.EnemyChase2.value = 1
         self.paws1.reset()
@@ -178,23 +180,25 @@ class CubChase(QWidget):
         q2input = Queue()
         quit_queue = Queue()
 
-        p1 = Process(target=PlayerProcess.player_function, args=(self.x, self.y, q1input, quit_queue))
-        p2 = Process(target=PlayerProcess.player_function, args=(self.x2, self.y2, q2input, quit_queue))
+        p1 = Process(target=PlayerProcess.player_function, args=(self.x, self.y, q1input, quit_queue, self.cought1))
+        p2 = Process(target=PlayerProcess.player_function, args=(self.x2, self.y2, q2input, quit_queue, self.cought2))
         p3 = Process(target=EnemyProcess.move_enemy, args=(self.ex1, self.ey1, self.x, self.y, self.x2, self.y2,
                                                            quit_queue, self.life1, self.life2, self.enemyVel,
-                                                           self.EnemyChase1))
+                                                           self.EnemyChase1, self.cought1, self.cought2))
         p4 = Process(target=EnemyProcess.move_enemy, args=(self.ex2, self.ey2, self.x2, self.y2, self.x, self.y,
                                                            quit_queue, self.life2, self.life1, self.enemyVel,
-                                                           self.EnemyChase2))
+                                                           self.EnemyChase2, self.cought2, self.cought1))
         p1.start()
         p2.start()
         p3.start()
         p4.start()
+
         quit = False
         timer = threading.Timer(10.0, self.timer_stopped)
         timer.start()
+
         while not self.playerOneFinished or not self.playerTwoFinished:
-            pygame.time.delay(40)
+            pygame.time.delay(30)
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -233,10 +237,10 @@ class CubChase(QWidget):
 
         self.playerOneTotal += self.playerOnePoints
         self.playerTwoTotal += self.playerTwoPoints
-        p1.kill()
-        p2.kill()
-        p3.kill()
-        p4.kill()
+        #p1.kill()
+        #p2.kill()
+        #p3.kill()
+        #p4.kill()
         if not quit and not self.game_finished:
             pygame.time.delay(1000)
             self.showResults()
@@ -247,8 +251,11 @@ class CubChase(QWidget):
     def showResults(self):
         self._backgroundResult = pygame.image.load("result.jpg")
         self.screen.blit(self._backgroundResult, [0, 0])
+        #ovo nece trebati kada bude slika za dugme
+        #samo izracunati koordinate
         white = (255, 255, 255)
         pygame.draw.rect(self._display_surf, white, (300, 200, 40, 50))
+
         pygame.display.update()
         self.playerTwoPoints = self.paws1.get_score()
         self.playerOnePoints = self.paws2.get_score()
@@ -256,6 +263,7 @@ class CubChase(QWidget):
             self.enemyVel = self.enemyVel + 1
         wait = True
         while wait:
+            # pratiti poziciju kursora
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     wait = False
@@ -331,18 +339,28 @@ class CubChase(QWidget):
         self.paws1.draw(self._display_surf, self._paws_image)
         self.paws2.draw(self._display_surf, self._paws_image2)
 
+        if self.cought1.value == 1:
+            self.cought1.value = 0
+            self.x.value = 379
+            self.y.value = 210
+        if self.cought2.value == 1:
+            self.cought2.value = 0
+            self.x2.value = 237
+            self.y2.value = 210
+
         if not self.player_one_dead:
             self.screen.blit(self.playerOne, (self.x.value, self.y.value))
-
         if not self.player_two_dead:
             self.screen.blit(self.playerTwo, (self.x2.value, self.y2.value))
 
         self.screen.blit(self.enemyOne, (self.ex1.value, self.ey1.value))
         self.screen.blit(self.enemyTwo, (self.ex2.value, self.ey2.value))
+
         self.screen.blit(self._board, [5, 5])
         self.screen.blit(self._board, [480, 5])
         self.playerOnePoints = self.paws1.get_score()
         self.playerTwoPoints = self.paws2.get_score()
+
         font = pygame.font.Font('freesansbold.ttf', 12)
         black = (255, 255, 255)
 

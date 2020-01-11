@@ -72,7 +72,7 @@ class CubChase(QWidget):
 
     def initUI(self):
         self.hbox = QHBoxLayout(self)
-        self.pixmap = QPixmap("pocetna.jpg")
+        self.pixmap = QPixmap("pocetna2.jpg")
         self.setMaximumSize(640, 480)
         self.setMinimumSize(640, 480)
 
@@ -104,11 +104,19 @@ class CubChase(QWidget):
         self.btn.setStyleSheet('background-color: rgba(255, 255, 255, 0)')
         self.btn.setCursor(Qt.PointingHandCursor)
         self.btn.setIconSize(QSize(89, 46))
-        self.btn.resize(100, 50)
-        self.btn.move(120, 323)
+        self.btn.resize(155, 40)
+        self.btn.move(90, 255)
 
         self.btn1 = QPushButton('', self)
         self.btn1.setVisible(False)
+
+        self.btnT = QPushButton('', self)
+        self.btnT.clicked.connect(self.showTournament)
+        self.btnT.setStyleSheet('background-color: rgba(255, 255, 255, 0)')
+        self.btnT.setCursor(Qt.PointingHandCursor)
+        self.btnT.setIconSize(QSize(89, 46))
+        self.btnT.resize(140, 35)
+        self.btnT.move(100, 345)
 
         self.show()
 
@@ -129,7 +137,12 @@ class CubChase(QWidget):
         self.btn1.move(285, 355)
         self.btn1.setCursor(Qt.PointingHandCursor)
         self.btn1.clicked.connect(self.showMaze)
+        self.enemyVel = 1
         self.show()
+
+    def showTournament(self):
+        self.pixmap = QPixmap("turnirPozadina.jpg")
+        self.lbl.setPixmap(self.pixmap)
 
     def timer_stopped(self):
         self.add_force = True
@@ -168,20 +181,25 @@ class CubChase(QWidget):
         self.y.value = 210
         self.x2.value = 237
         self.y2.value = 210
+        self.ex1.value = 437
+        self.ey1.value = 420
+        self.ex2.value = 175
+        self.ey2.value = 420
         self.EnemyChase1.value = 1
         self.EnemyChase2.value = 1
         self.paws1.reset()
         self.paws2.reset()
         self.life1.value = 3
         self.life2.value = 3
+        self.add_force = False
         self.on_render()
 
         q1input = Queue()
         q2input = Queue()
         quit_queue = Queue()
 
-        p1 = Process(target=PlayerProcess.player_function, args=(self.x, self.y, q1input, quit_queue, self.cought1))
-        p2 = Process(target=PlayerProcess.player_function, args=(self.x2, self.y2, q2input, quit_queue, self.cought2))
+        p1 = Process(target=PlayerProcess.player_function, args=(self.x, self.y, q1input, quit_queue))
+        p2 = Process(target=PlayerProcess.player_function, args=(self.x2, self.y2, q2input, quit_queue))
         p3 = Process(target=EnemyProcess.move_enemy, args=(self.ex1, self.ey1, self.x, self.y, self.x2, self.y2,
                                                            quit_queue, self.life1, self.life2, self.enemyVel,
                                                            self.EnemyChase1, self.cought1, self.cought2))
@@ -237,10 +255,10 @@ class CubChase(QWidget):
 
         self.playerOneTotal += self.playerOnePoints
         self.playerTwoTotal += self.playerTwoPoints
-        #p1.kill()
-        #p2.kill()
-        #p3.kill()
-        #p4.kill()
+        p1.kill()
+        p2.kill()
+        p3.kill()
+        p4.kill()
         if not quit and not self.game_finished:
             pygame.time.delay(1000)
             self.showResults()
@@ -249,20 +267,25 @@ class CubChase(QWidget):
         pygame.quit()
 
     def showResults(self):
-        self._backgroundResult = pygame.image.load("result.jpg")
+        bg = pygame.image.load("white.png")
+        self.screen.blit(bg, [0, 0])
+        self._backgroundResult = pygame.image.load("rezultatKonacno.png")
         self.screen.blit(self._backgroundResult, [0, 0])
         #ovo nece trebati kada bude slika za dugme
         #samo izracunati koordinate
-        white = (255, 255, 255)
-        pygame.draw.rect(self._display_surf, white, (300, 200, 40, 50))
+        #white = (255, 255, 255)
+        #pygame.draw.rect(self._display_surf, white, (300, 200, 40, 50))
 
         pygame.display.update()
         self.playerTwoPoints = self.paws1.get_score()
         self.playerOnePoints = self.paws2.get_score()
         if self.enemyVel < 4:
             self.enemyVel = self.enemyVel + 1
+
         wait = True
-        while wait:
+        wait1 = True # za HOME
+        wait2 = True # za NEXT LEVEL
+        while wait and wait2: # and wait1:
             # pratiti poziciju kursora
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -270,21 +293,33 @@ class CubChase(QWidget):
 
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     mouse_pos = event.pos
-                    if 300 < mouse_pos[0] < 340 and 200 < mouse_pos[1] < 250:
-                        wait = False
-
-        self.showMaze()
+                    if 60 < mouse_pos[0] < 150 and 427 < mouse_pos[1] < 457:
+                        wait1 = False
+                    if 495 < mouse_pos[0] < 585 and 430 < mouse_pos[1] < 460:
+                        wait2 = False
+        if not wait2:
+            self.showMaze()
+        #elif not wait1:
+        #    self.initUI()
 
     def showGameOver(self):
-        self._backgroundResult = pygame.image.load("result.jpg")
+        bg = pygame.image.load("white.png")
+        self.screen.blit(bg, [0, 0])
+        self._backgroundResult = pygame.image.load("GameOverKonacno.png")
         self.screen.blit(self._backgroundResult, [0, 0])
         pygame.display.update()
         wait = True
-        while wait:
-            mouse = pygame.mouse.get_pos()
+        wait1 = True
+        while wait: # and wait1:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     wait = False
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    mouse_pos = event.pos
+                    if 60 < mouse_pos[0] < 150 and 427 < mouse_pos[1] < 457:
+                        wait1 = False
+        #if not wait1:
+        #    self.initUI()
 
     def on_render(self):
         self.screen = pygame.display.set_mode((self.windowWidth, self.windowHeight))
@@ -392,13 +427,13 @@ class CubChase(QWidget):
             xl = xl + 25
 
         total = self.maze.get_total()
-        if (self.paws1.get_score() + self.paws2.get_score()) == total:
-            if self.x.value > (640 - self.matW) and self.y.value > (480 - 2 * self.matH):
-                self.playerOneFinished = True
-                self.EnemyChase1.value = 0
-            if self.x2.value > (640 - self.matW) and self.y2.value > (480 - 2 * self.matH):
-                self.playerTwoFinished = True
-                self.EnemyChase2.value = 0
+        #if (self.paws1.get_score() + self.paws2.get_score()) == total:
+        if self.x.value > (640 - self.matW) and self.y.value > (480 - 2 * self.matH):
+            self.playerOneFinished = True
+            self.EnemyChase1.value = 0
+        if self.x2.value > (640 - self.matW) and self.y2.value > (480 - 2 * self.matH):
+            self.playerTwoFinished = True
+            self.EnemyChase2.value = 0
 
         if self.life1.value == 0:
             self.playerOneFinished = True

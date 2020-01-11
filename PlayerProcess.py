@@ -1,7 +1,7 @@
 import CubMaze
-import pygame
 
-def player_function(xk, yk, qin, q, cought):
+
+def player_function(xk, yk, qin, q):
     run = True
     width = 25
     height = 25

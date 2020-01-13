@@ -2,11 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5f0a1f15-81cb-48ae-bd5d-bed934f7677a" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/Cub-Chase.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Cub-Chase.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CubChase.py" beforeDir="false" afterPath="$PROJECT_DIR$/CubChase.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PlayerProcess.py" beforeDir="false" afterPath="$PROJECT_DIR$/PlayerProcess.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EnemyProcess.py" beforeDir="false" afterPath="$PROJECT_DIR$/EnemyProcess.py" afterDir="false" />
     </list>
-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -22,22 +23,10 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$USER_HOME$/Desktop/CubChase" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
-  <component name="RunDashboard">
-    <option name="ruleStates">
-      <list>
-        <RuleState>
-          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
-        </RuleState>
-        <RuleState>
-          <option name="name" value="StatusDashboardGroupingRule" />
-        </RuleState>
-      </list>
-    </option>
-  </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Python.CubChase">
     <configuration name="CubChase" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Cub-Chase" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -59,11 +48,45 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="EnemyProcess" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="Cub-Chase" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/EnemyProcess.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="Python.CubChase" />
+        <item itemvalue="Python.EnemyProcess" />
       </list>
     </recent_temporary>
+  </component>
+  <component name="ServiceViewManager">
+    <option name="viewStates">
+      <list>
+        <serviceView>
+          <treeState>
+            <expand />
+            <select />
+          </treeState>
+        </serviceView>
+      </list>
+    </option>
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -92,34 +115,34 @@
     </option>
   </component>
   <component name="WindowStateProjectService">
-    <state x="409" y="4" key="#CubChase" timestamp="1576842007285">
+    <state x="409" y="4" key="#CubChase" timestamp="1578915089891">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="409" y="4" key="#CubChase/0.0.1366.728@0.0.1366.728" timestamp="1576842007285" />
+    <state x="409" y="4" key="#CubChase/0.0.1366.728@0.0.1366.728" timestamp="1578915089891" />
     <state x="463" y="120" key="FileChooserDialogImpl" timestamp="1578617818335">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="463" y="120" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1578617818335" />
-    <state width="1344" height="174" key="GridCell.Tab.0.bottom" timestamp="1578665358888">
+    <state width="1344" height="174" key="GridCell.Tab.0.bottom" timestamp="1578919521188">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1344" height="174" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1578665358887" />
-    <state width="1344" height="174" key="GridCell.Tab.0.center" timestamp="1578665358885">
+    <state width="1344" height="174" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1578919521188" />
+    <state width="1344" height="174" key="GridCell.Tab.0.center" timestamp="1578919521187">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1344" height="174" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1578665358885" />
-    <state width="1344" height="174" key="GridCell.Tab.0.left" timestamp="1578665358885">
+    <state width="1344" height="174" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1578919521187" />
+    <state width="1344" height="174" key="GridCell.Tab.0.left" timestamp="1578919521187">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1344" height="174" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1578665358882" />
-    <state width="1344" height="174" key="GridCell.Tab.0.right" timestamp="1578665358886">
+    <state width="1344" height="174" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1578919521187" />
+    <state width="1344" height="174" key="GridCell.Tab.0.right" timestamp="1578919521187">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1344" height="174" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1578665358886" />
-    <state x="186" y="0" key="SettingsEditor" timestamp="1578609902711">
+    <state width="1344" height="174" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1578919521187" />
+    <state x="186" y="0" key="SettingsEditor" timestamp="1578915111347">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="186" y="0" key="SettingsEditor/0.0.1366.728@0.0.1366.728" timestamp="1578609902711" />
+    <state x="186" y="0" key="SettingsEditor/0.0.1366.728@0.0.1366.728" timestamp="1578915111347" />
     <state x="390" y="190" key="com.intellij.ide.util.TipDialog" timestamp="1578617795089">
       <screen x="0" y="0" width="1366" height="728" />
     </state>

@@ -39,8 +39,6 @@ class CubChase(QWidget):
         self._board = None
         self._life = None
         self.add_force = False
-        self.add_trap1 = True
-        self.add_trap2 = True
 
         self.windowWidth = 640
         self.windowHeight = 480
@@ -58,6 +56,9 @@ class CubChase(QWidget):
         self.EnemyChase2 = Value('i', 1)
         self.cought1 = Value('i', 0)
         self.cought2 = Value('i', 0)
+        self.caught3 = Value('i', 0)
+        self.add_trap1 = Value('i', 1)
+        self.add_trap2 = Value('i', 1)
         self.width = 25
         self.height = 25
         self.enemyVel = 1
@@ -147,11 +148,14 @@ class CubChase(QWidget):
     def timer_stopped(self):
         self.add_force = True
 
+    #nakon 10 sekundi ce se ove vrednost setovati
     def timer_trap1(self):
-        self.add_trap1 = False
+        self.add_trap1.value = 0
+        self.caught3.value = 0
 
     def timer_trap2(self):
-        self.add_trap2 = False
+        self.add_trap2.value = 0
+        self.caught3.value = 0
 
     def showMaze(self):
         self.hide()
@@ -202,10 +206,12 @@ class CubChase(QWidget):
         p2 = Process(target=PlayerProcess.player_function, args=(self.x2, self.y2, q2input, quit_queue))
         p3 = Process(target=EnemyProcess.move_enemy, args=(self.ex1, self.ey1, self.x, self.y, self.x2, self.y2,
                                                            quit_queue, self.life1, self.life2, self.enemyVel,
-                                                           self.EnemyChase1, self.cought1, self.cought2))
+                                                           self.EnemyChase1, self.cought1, self.cought2,
+                                                           self.add_trap1, self.add_trap2, self.caught3))
         p4 = Process(target=EnemyProcess.move_enemy, args=(self.ex2, self.ey2, self.x2, self.y2, self.x, self.y,
                                                            quit_queue, self.life2, self.life1, self.enemyVel,
-                                                           self.EnemyChase2, self.cought2, self.cought1))
+                                                           self.EnemyChase2, self.cought2, self.cought1,
+                                                           self.add_trap1, self.add_trap2, self.caught3))
         p1.start()
         p2.start()
         p3.start()
@@ -455,30 +461,32 @@ class CubChase(QWidget):
                 self.life2.value = self.life2.value + 1
                 self.add_force = False
 
-        #kad neprijatelj dodirne zamku, bude aktivan jos 10 sekundi i onda nestane
-        if self.add_trap1:
+        #kad igrac dodirne zamku, bude aktivna jos 10 sekundi i onda nestane i tad kad je dodirnuo setuje se vrednost
+        #na 2, da bi se znalo da je zamka aktivirana
+        if self.add_trap1.value == 1 or self.add_trap1.value == 2:
             self._display_surf.blit(self._trap, [87, 95])
+
             if 87 < self.x.value < 112 and 95 < self.y.value < 120:
+                self.add_trap1.value = 2
                 timer_t1 = threading.Timer(10.0, self.timer_trap1)
                 timer_t1.start()
-                self.add_trap1 = True
 
             elif 87 < self.x2.value < 112 and 95 < self.y2.value < 120:
+                self.add_trap1.value = 2
                 timer_t1 = threading.Timer(10.0, self.timer_trap1)
                 timer_t1.start()
-                self.add_trap1 = True
 
-        if self.add_trap2:
+        if self.add_trap2.value == 1 or self.add_trap2.value == 2:
             self._display_surf.blit(self._trap, [467, 422])
             if 455 < self.x.value < 480 and 410 < self.y.value < 435:
+                self.add_trap2.value = 2
                 timer_t2 = threading.Timer(10.0, self.timer_trap2)
                 timer_t2.start()
-                self.add_trap2 = True
 
             elif 455 < self.x2.value < 480 and 410 < self.y2.value < 435:
+                self.add_trap2.value = 2
                 timer_t2 = threading.Timer(10.0, self.timer_trap2)
                 timer_t2.start()
-                self.add_trap2 = True
 
         pygame.display.update()
 

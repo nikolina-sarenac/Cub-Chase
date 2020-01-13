@@ -2,7 +2,8 @@ import CubMaze
 import pygame
 
 
-def move_enemy(xk, yk, player_x, player_y, other_player_x, other_player_y, q, life1, life2, vel, chase, cought, cought_other):
+def move_enemy(xk, yk, player_x, player_y, other_player_x, other_player_y, q, life1, life2, vel, chase, cought,\
+               cought_other, trap1, trap2, trap_caught):
         run = True
         width = 25
         height = 25
@@ -114,5 +115,19 @@ def move_enemy(xk, yk, player_x, player_y, other_player_x, other_player_y, q, li
 
             if life1.value == 0:
                 player_is_dead = True
+
+            #provera da li je neprijatelj na zamci, ako jeste proveri se da li je zamka aktivna, tj vrednost da li je 2,
+            #ako jeste pauzira se neprijatelj na 5 sekundi
+            if 87 < x + 12 < 112 and 90 < y + 12 < 115:
+                if trap1.value == 2:
+                    trap_caught.value = 1
+                    pygame.time.wait(5000)
+                trap_caught.value = 0
+
+            if 465 < x + 12 < 490 and 420 < y + 12 < 445:
+                if trap2.value == 2:
+                    trap_caught.value = 1
+                    pygame.time.wait(5000)
+                trap_caught.value = 0
 
             pygame.time.wait(30)

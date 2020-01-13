@@ -196,6 +196,8 @@ class CubChase(QWidget):
         self.life1.value = 3
         self.life2.value = 3
         self.add_force = False
+        self.player_one_dead = False
+        self.player_two_dead = False
         self.on_render()
 
         q1input = Queue()

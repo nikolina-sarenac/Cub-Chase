@@ -39,6 +39,7 @@ class CubChase(QWidget):
         self._board = None
         self._life = None
         self.add_force = False
+        self.crown = None
 
         self.windowWidth = 640
         self.windowHeight = 480
@@ -287,6 +288,35 @@ class CubChase(QWidget):
         #white = (255, 255, 255)
         #pygame.draw.rect(self._display_surf, white, (300, 200, 40, 50))
 
+        font = pygame.font.Font('Sketch_Block.ttf', 20)
+        black = (255, 255, 255)
+
+        text = font.render(self.name1, True, black)
+        result = font.render(str(self.playerTwoPoints), True, black)
+        total_results = font.render(str(self.playerTwoTotal), True, black)
+        textRect = text.get_rect()
+        resRect = result.get_rect()
+        totalRect = total_results.get_rect()
+        textRect.center = (96, 130)
+        resRect.center = (102, 317)
+        totalRect.center = (102, 247)
+        self._display_surf.blit(text, textRect)
+        self._display_surf.blit(result, resRect)
+        self._display_surf.blit(total_results, totalRect)
+
+        text2 = font.render(self.name2, True, black)
+        result2 = font.render(str(self.playerOnePoints), True, black)
+        total_results2 = font.render(str(self.playerOneTotal), True, black)
+        textRect2 = text2.get_rect()
+        res2Rect = result2.get_rect()
+        totalRect2 = total_results2.get_rect()
+        textRect2.center = (533, 122)
+        res2Rect.center = (534, 195)
+        totalRect2.center = (535, 272)
+        self._display_surf.blit(text2, textRect2)
+        self._display_surf.blit(result2, res2Rect)
+        self._display_surf.blit(total_results2, totalRect2)
+
         pygame.display.update()
         self.playerTwoPoints = self.paws1.get_score()
         self.playerOnePoints = self.paws2.get_score()
@@ -318,6 +348,40 @@ class CubChase(QWidget):
         self.screen.blit(bg, [0, 0])
         self._backgroundResult = pygame.image.load("GameOverKonacno.png")
         self.screen.blit(self._backgroundResult, [0, 0])
+        font = pygame.font.Font('Sketch_Block.ttf', 20)
+        black = (255, 255, 255)
+
+        text = font.render(self.name1, True, black)
+        result = font.render(str(self.playerTwoPoints), True, black)
+        total_results = font.render(str(self.playerTwoTotal), True, black)
+        textRect = text.get_rect()
+        resRect = result.get_rect()
+        totalRect = total_results.get_rect()
+        textRect.center = (96, 130)
+        resRect.center = (102, 317)
+        totalRect.center = (102, 247)
+        self._display_surf.blit(text, textRect)
+        self._display_surf.blit(result, resRect)
+        self._display_surf.blit(total_results, totalRect)
+
+        text2 = font.render(self.name2, True, black)
+        result2 = font.render(str(self.playerOnePoints), True, black)
+        total_results2 = font.render(str(self.playerOneTotal), True, black)
+        textRect2 = text2.get_rect()
+        res2Rect = result2.get_rect()
+        totalRect2 = total_results2.get_rect()
+        textRect2.center = (533, 122)
+        res2Rect.center = (534, 195)
+        totalRect2.center = (535, 272)
+        self._display_surf.blit(text2, textRect2)
+        self._display_surf.blit(result2, res2Rect)
+        self._display_surf.blit(total_results2, totalRect2)
+
+        self.crown = pygame.image.load("kruna.png")
+        if self.playerOneTotal < self.playerTwoTotal:
+            self.screen.blit(self.crown, [29, 72])
+        elif self.playerOneTotal > self.playerTwoTotal:
+            self.screen.blit(self.crown, [468, 72])
         pygame.display.update()
         wait = True
         wait1 = True
@@ -407,7 +471,7 @@ class CubChase(QWidget):
         self.playerOnePoints = self.paws1.get_score()
         self.playerTwoPoints = self.paws2.get_score()
 
-        font = pygame.font.Font('freesansbold.ttf', 12)
+        font = pygame.font.Font('Sketch_Block.ttf', 12)
         black = (255, 255, 255)
 
         text = font.render(self.name1, True, black)

@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import (QWidget, QHBoxLayout, QLabel, QApplication, QPushBu
 from PyQt5.QtCore import (Qt, QSize)
 from PyQt5.QtGui import (QPixmap, QIcon)
 from multiprocessing import Process, Queue, Value
-import threading
+from threading import Timer
 import sys
 import pygame
 import CubMaze
@@ -69,6 +69,8 @@ class CubChase(QWidget):
         self.player_one_dead = False
         self.player_two_dead = False
         self.game_finished = False
+        self.timer_t1 = None
+        self.timer_t2 = None
 
         self.initUI()
 
@@ -201,6 +203,13 @@ class CubChase(QWidget):
         self.player_two_dead = False
         self.add_trap1 = Value('i', 1)
         self.add_trap2 = Value('i', 1)
+        self.caught3.value = 0
+
+        if self.timer_t2 is not None:
+            self.timer_t2.cancel()
+
+        if self.timer_t1 is not None:
+            self.timer_t1.cancel()
 
         self.on_render()
 
@@ -224,7 +233,7 @@ class CubChase(QWidget):
         p4.start()
 
         quit = False
-        timer = threading.Timer(10.0, self.timer_stopped)
+        timer = Timer(10.0, self.timer_stopped)
         timer.start()
 
         while not self.playerOneFinished or not self.playerTwoFinished:
@@ -530,32 +539,36 @@ class CubChase(QWidget):
                 self.life2.value = self.life2.value + 1
                 self.add_force = False
 
-        #kad igrac dodirne zamku, bude aktivna jos 10 sekundi i onda nestane i tad kad je dodirnuo setuje se vrednost
-        #na 2, da bi se znalo da je zamka aktivirana
+        #kad igrac dodirne zamku, bude aktivna jos 10 sekundi i onda nestane i tad kad je neprijatelj dodirnuo setuje
+        # se vrednost na 2, da bi se znalo da je zamka aktivirana
         if self.add_trap1.value == 1 or self.add_trap1.value == 2:
             self._display_surf.blit(self._trap, [87, 95])
 
             if 87 < self.x.value < 112 and 95 < self.y.value < 120:
-                self.add_trap1.value = 2
-                timer_t1 = threading.Timer(10.0, self.timer_trap1)
-                timer_t1.start()
+                if self.add_trap1.value == 1:
+                    self.add_trap1.value = 2
+                    self.timer_t1 = Timer(10.0, self.timer_trap1)
+                    self.timer_t1.start()
 
             elif 87 < self.x2.value < 112 and 95 < self.y2.value < 120:
-                self.add_trap1.value = 2
-                timer_t1 = threading.Timer(10.0, self.timer_trap1)
-                timer_t1.start()
+                if self.add_trap1.value == 1:
+                    self.add_trap1.value = 2
+                    self.timer_t1 = Timer(10.0, self.timer_trap1)
+                    self.timer_t1.start()
 
         if self.add_trap2.value == 1 or self.add_trap2.value == 2:
             self._display_surf.blit(self._trap, [467, 422])
             if 455 < self.x.value < 480 and 410 < self.y.value < 435:
-                self.add_trap2.value = 2
-                timer_t2 = threading.Timer(10.0, self.timer_trap2)
-                timer_t2.start()
+                if self.add_trap2.value == 1:
+                    self.add_trap2.value = 2
+                    self.timer_t2 = Timer(10.0, self.timer_trap2)
+                    self.timer_t2.start()
 
             elif 455 < self.x2.value < 480 and 410 < self.y2.value < 435:
-                self.add_trap2.value = 2
-                timer_t2 = threading.Timer(10.0, self.timer_trap2)
-                timer_t2.start()
+                if self.add_trap2.value == 1:
+                    self.add_trap2.value = 2
+                    self.timer_t2 = Timer(10.0, self.timer_trap2)
+                    self.timer_t2.start()
 
         pygame.display.update()
 

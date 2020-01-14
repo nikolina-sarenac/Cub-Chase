@@ -20,7 +20,7 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../CubChase.py" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RunManager" selected="Python.CubChase">
@@ -116,37 +116,37 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="409" y="4" key="#CubChase/0.0.1366.728@0.0.1366.728" timestamp="1578915089891" />
-    <state x="463" y="120" key="FileChooserDialogImpl" timestamp="1578617818335">
+    <state x="463" y="120" key="FileChooserDialogImpl" timestamp="1579023089728">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="463" y="120" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1578617818335" />
+    <state x="463" y="120" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1579023089728" />
     <state x="0" y="0" key="FileDocumentManager.FileCacheConflict" timestamp="1578927623182">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="0" y="0" key="FileDocumentManager.FileCacheConflict/0.0.1366.728@0.0.1366.728" timestamp="1578927623182" />
-    <state width="1344" height="174" key="GridCell.Tab.0.bottom" timestamp="1578927858521">
+    <state width="1328" height="174" key="GridCell.Tab.0.bottom" timestamp="1579023665841">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1344" height="174" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1578927858521" />
-    <state width="1344" height="174" key="GridCell.Tab.0.center" timestamp="1578927858521">
+    <state width="1328" height="174" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1579023665841" />
+    <state width="1328" height="174" key="GridCell.Tab.0.center" timestamp="1579023665840">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1344" height="174" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1578927858521" />
-    <state width="1344" height="174" key="GridCell.Tab.0.left" timestamp="1578927858521">
+    <state width="1328" height="174" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1579023665840" />
+    <state width="1328" height="174" key="GridCell.Tab.0.left" timestamp="1579023665840">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1344" height="174" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1578927858521" />
-    <state width="1344" height="174" key="GridCell.Tab.0.right" timestamp="1578927858521">
+    <state width="1328" height="174" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1579023665840" />
+    <state width="1328" height="174" key="GridCell.Tab.0.right" timestamp="1579023665840">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1344" height="174" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1578927858521" />
+    <state width="1328" height="174" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1579023665840" />
     <state x="186" y="0" key="SettingsEditor" timestamp="1578915111347">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="186" y="0" key="SettingsEditor/0.0.1366.728@0.0.1366.728" timestamp="1578915111347" />
-    <state x="390" y="190" key="com.intellij.ide.util.TipDialog" timestamp="1578927513675">
+    <state x="390" y="190" key="com.intellij.ide.util.TipDialog" timestamp="1578946885594">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="390" y="190" key="com.intellij.ide.util.TipDialog/0.0.1366.728@0.0.1366.728" timestamp="1578927513675" />
+    <state x="390" y="190" key="com.intellij.ide.util.TipDialog/0.0.1366.728@0.0.1366.728" timestamp="1578946885594" />
   </component>
 </project>

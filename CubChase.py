@@ -35,11 +35,11 @@ class CubChase(QWidget):
         self.playerOneTotal = 0
         self.playerTwoTotal = 0
         self._trap = None
-        self._names = None
         self._board = None
         self._life = None
         self.add_force = False
         self.crown = None
+        self.continue_img = None
 
         self.windowWidth = 640
         self.windowHeight = 480
@@ -71,6 +71,8 @@ class CubChase(QWidget):
         self.game_finished = False
         self.timer_t1 = None
         self.timer_t2 = None
+        self.is_tournament = False
+        self.one_winner = False
 
         self.initUI()
 
@@ -103,35 +105,98 @@ class CubChase(QWidget):
         self.txtbox2.setAlignment(Qt.AlignCenter)
         self.txtbox2.setVisible(False)
 
+        self.txtbox3 = QLineEdit(self)
+        self.txtbox3.move(45, 130)
+        self.txtbox3.resize(200, 35)
+        self.txtbox3.setStyleSheet('background-color: #f5deb3; border: 2px solid teal; font: Bold')
+        self.txtbox3.setAlignment(Qt.AlignCenter)
+        self.txtbox3.setVisible(False)
+
+        # T U R N I R
+        self.txtbox4 = QLineEdit(self)
+        self.txtbox4.move(55, 130)
+        self.txtbox4.resize(200, 35)
+        self.txtbox4.setStyleSheet('background-color: #f5deb3; border: 2px solid peru; font: Bold')
+        self.txtbox4.setAlignment(Qt.AlignCenter)
+        self.txtbox4.setVisible(False)
+
+        self.txtbox5 = QLineEdit(self)
+        self.txtbox5.move(55, 180)
+        self.txtbox5.resize(200, 35)
+        self.txtbox5.setStyleSheet('background-color: #f5deb3; border: 2px solid peru; font: Bold')
+        self.txtbox5.setAlignment(Qt.AlignCenter)
+        self.txtbox5.setVisible(False)
+
+        self.txtbox6 = QLineEdit(self)
+        self.txtbox6.move(55, 230)
+        self.txtbox6.resize(200, 35)
+        self.txtbox6.setStyleSheet('background-color: #f5deb3; border: 2px solid peru; font: Bold')
+        self.txtbox6.setAlignment(Qt.AlignCenter)
+        self.txtbox6.setVisible(False)
+
+        self.txtbox7 = QLineEdit(self)
+        self.txtbox7.move(55, 280)
+        self.txtbox7.resize(200, 35)
+        self.txtbox7.setStyleSheet('background-color: #f5deb3; border: 2px solid peru; font: Bold')
+        self.txtbox7.setAlignment(Qt.AlignCenter)
+        self.txtbox7.setVisible(False)
+
+        self.txtbox8 = QLineEdit(self)
+        self.txtbox8.move(385, 130)
+        self.txtbox8.resize(200, 35)
+        self.txtbox8.setStyleSheet('background-color: #f5deb3; border: 2px solid peru; font: Bold')
+        self.txtbox8.setAlignment(Qt.AlignCenter)
+        self.txtbox8.setVisible(False)
+
+        self.txtbox9 = QLineEdit(self)
+        self.txtbox9.move(385, 180)
+        self.txtbox9.resize(200, 35)
+        self.txtbox9.setStyleSheet('background-color: #f5deb3; border: 2px solid peru; font: Bold')
+        self.txtbox9.setAlignment(Qt.AlignCenter)
+        self.txtbox9.setVisible(False)
+
+        self.txtbox10 = QLineEdit(self)
+        self.txtbox10.move(385, 230)
+        self.txtbox10.resize(200, 35)
+        self.txtbox10.setStyleSheet('background-color: #f5deb3; border: 2px solid peru; font: Bold')
+        self.txtbox10.setAlignment(Qt.AlignCenter)
+        self.txtbox10.setVisible(False)
+
+        self.txtbox11 = QLineEdit(self)
+        self.txtbox11.move(385, 280)
+        self.txtbox11.resize(200, 35)
+        self.txtbox11.setStyleSheet('background-color: #f5deb3; border: 2px solid peru; font: Bold')
+        self.txtbox11.setAlignment(Qt.AlignCenter)
+        self.txtbox11.setVisible(False)
+
         self.btn = QPushButton('', self)
         self.btn.clicked.connect(self.showDialog)
         self.btn.setStyleSheet('background-color: rgba(255, 255, 255, 0)')
         self.btn.setCursor(Qt.PointingHandCursor)
         self.btn.setIconSize(QSize(89, 46))
-        self.btn.resize(155, 40)
-        self.btn.move(90, 255)
-
-        self.btn1 = QPushButton('', self)
-        self.btn1.setVisible(False)
+        self.btn.resize(160, 35)
+        self.btn.move(90, 245)
+        self.btn.setVisible(True)
 
         self.btnT = QPushButton('', self)
-        self.btnT.clicked.connect(self.showTournament)
+        self.btnT.clicked.connect(self.show_tournament)
         self.btnT.setStyleSheet('background-color: rgba(255, 255, 255, 0)')
         self.btnT.setCursor(Qt.PointingHandCursor)
         self.btnT.setIconSize(QSize(89, 46))
-        self.btnT.resize(140, 35)
-        self.btnT.move(100, 345)
+        self.btnT.resize(155, 35)
+        self.btnT.move(97, 323)
+        self.btnT.setVisible(True)
 
-        self.show()
+        self.btnOnline = QPushButton('', self)
+        self.btnOnline.clicked.connect(self.show_tournament)
+        self.btnOnline.setStyleSheet('background-color: rgba(255, 255, 255, 0)')
+        self.btnOnline.setCursor(Qt.PointingHandCursor)
+        self.btnOnline.setIconSize(QSize(89, 46))
+        self.btnOnline.resize(135, 30)
+        self.btnOnline.move(105, 400)
+        self.btnOnline.setVisible(True)
 
-    def showDialog(self):
-        self.pixmap = QPixmap("pozadina2.png")
-        self.lbl.setPixmap(self.pixmap)
-
-        self.txtbox1.setVisible(True)
-        self.txtbox2.setVisible(True)
-
-        self.btn1.setVisible(True)
+        self.btn1 = QPushButton('', self)
         self.btn1.setText('')
         self.btn1.resize(150, 50)
         self.btn1.move(100, 400)
@@ -140,13 +205,125 @@ class CubChase(QWidget):
         self.btn1.resize(93, 50)
         self.btn1.move(285, 355)
         self.btn1.setCursor(Qt.PointingHandCursor)
-        self.btn1.clicked.connect(self.showMaze)
+        self.btn1.clicked.connect(self.get_player_names)
+        self.btn1.setVisible(False)
+
+        self.btnStartT = QPushButton('', self)
+        self.btnStartT.clicked.connect(self.start_tournament)
+        self.btnStartT.setStyleSheet('background-color: rgba(255, 255, 255, 0)')
+        self.btnStartT.setCursor(Qt.PointingHandCursor)
+        self.btnStartT.resize(140, 47)
+        self.btnStartT.move(250, 380)
+        self.btnStartT.setVisible(False)
+
+        self.btnBack = QPushButton('', self)
+        self.btnBack.clicked.connect(self.show_back)
+        self.btnBack.setStyleSheet('background-color: rgba(255, 255, 255, 0)')
+        self.btnBack.setCursor(Qt.PointingHandCursor)
+        self.btnBack.resize(90, 29)
+        self.btnBack.move(230, 429)
+        self.btnBack.setVisible(False)
+
+        self.btnBack2 = QPushButton('', self)
+        self.btnBack2.clicked.connect(self.show_back)
+        self.btnBack2.setStyleSheet('background-color: rgba(255, 255, 255, 0)')
+        self.btnBack2.setCursor(Qt.PointingHandCursor)
+        self.btnBack2.resize(74, 40)
+        self.btnBack2.move(35, 423)
+        self.btnBack2.setVisible(False)
+
+        self.show()
+
+    def showDialog(self):
+        self.pixmap = QPixmap("pozadina2.jpg")
+        self.lbl.setPixmap(self.pixmap)
+
+        self.txtbox1.setVisible(True)
+        self.txtbox2.setVisible(True)
+        self.btn1.setVisible(True)
+        self.btn.setVisible(False)
+        self.btnT.setVisible(False)
+        self.btnOnline.setVisible(False)
+        self.btnBack2.setVisible(True)
         self.enemyVel = 1
         self.show()
+
+    def show_back(self):
+        self.pixmap = QPixmap("pocetna.jpg")
+        self.lbl.setPixmap(self.pixmap)
+        self.btnStartT.setVisible(False)
+        self.btnBack.setVisible(False)
+        self.txtbox1.setVisible(False)
+        self.txtbox2.setVisible(False)
+        self.txtbox3.setVisible(False)
+        self.txtbox4.setVisible(False)
+        self.txtbox5.setVisible(False)
+        self.txtbox6.setVisible(False)
+        self.txtbox7.setVisible(False)
+        self.txtbox8.setVisible(False)
+        self.txtbox9.setVisible(False)
+        self.txtbox10.setVisible(False)
+        self.txtbox11.setVisible(False)
+        self.btnBack2.setVisible(False)
+        self.btn1.setVisible(False)
+        self.btn.setVisible(True)
+        self.btnT.setVisible(True)
+        self.btnOnline.setVisible(True)
 
     def showTournament(self):
         self.pixmap = QPixmap("turnirPozadina.jpg")
         self.lbl.setPixmap(self.pixmap)
+
+
+
+
+    def start_tournament(self):
+        self.users = [{} for i in range(8)]
+        self.counter = 0
+
+        if len(self.txtbox4.text()) > 0 and not self.txtbox4.text().isspace():
+            self.users[self.counter]['name'] = self.txtbox4.text()
+            self.users[self.counter]['points'] = 0
+            self.users[self.counter]['winner'] = False
+            self.counter += 1
+        if len(self.txtbox5.text()) > 0 and not self.txtbox5.text().isspace():
+            self.users[self.counter]['name'] = self.txtbox5.text()
+            self.users[self.counter]['points'] = 0
+            self.users[self.counter]['winner'] = False
+            self.counter += 1
+        if len(self.txtbox6.text()) > 0 and not self.txtbox6.text().isspace():
+            self.users[self.counter]['name'] = self.txtbox6.text()
+            self.users[self.counter]['points'] = 0
+            self.users[self.counter]['winner'] = False
+            self.counter += 1
+        if len(self.txtbox7.text()) > 0 and not self.txtbox7.text().isspace():
+            self.users[self.counter]['name'] = self.txtbox7.text()
+            self.users[self.counter]['points'] = 0
+            self.users[self.counter]['winner'] = False
+            self.counter += 1
+        if len(self.txtbox8.text()) > 0 and not self.txtbox8.text().isspace():
+            self.users[self.counter]['name'] = self.txtbox8.text()
+            self.users[self.counter]['points'] = 0
+            self.users[self.counter]['winner'] = False
+            self.counter += 1
+        if len(self.txtbox9.text()) > 0 and not self.txtbox9.text().isspace():
+            self.users[self.counter]['name'] = self.txtbox9.text()
+            self.users[self.counter]['points'] = 0
+            self.users[self.counter]['winner'] = False
+            self.counter += 1
+        if len(self.txtbox10.text()) > 0 and not self.txtbox10.text().isspace():
+            self.users[self.counter]['name'] = self.txtbox10.text()
+            self.users[self.counter]['points'] = 0
+            self.users[self.counter]['winner'] = False
+            self.counter += 1
+        if len(self.txtbox11.text()) > 0 and not self.txtbox11.text().isspace():
+            self.users[self.counter]['name'] = self.txtbox11.text()
+            self.users[self.counter]['points'] = 0
+            self.users[self.counter]['winner'] = False
+            self.counter += 1
+
+        if self.counter == 4 or self.counter == 8:
+            self.continue_tournament()
 
     def timer_stopped(self):
         self.add_force = True
@@ -160,7 +337,13 @@ class CubChase(QWidget):
         self.add_trap2.value = 0
         self.caught3.value = 0
 
-    def showMaze(self):
+    def get_player_names(self):
+        self.is_tournament = False
+        self.playerOneTotal = 0
+        self.playerTwoTotal = 0
+        self.showMaze(self.txtbox1.text(), self.txtbox2.text())
+
+    def showMaze(self, name1, name2):
         self.hide()
         pygame.init()
         pygame.display.set_caption('Cub Chase')
@@ -178,8 +361,8 @@ class CubChase(QWidget):
         self._names = pygame.image.load("names.png")
         self._board = pygame.image.load("daska.png")
         self._life = pygame.image.load("life.png")
-        self.name1 = self.txtbox1.text()
-        self.name2 = self.txtbox2.text()
+        self.name1 = name1
+        self.name2 = name2
 
         # inicijalizacija igraca i mape
         self.playerOneFinished = False
@@ -204,6 +387,7 @@ class CubChase(QWidget):
         self.add_trap1 = Value('i', 1)
         self.add_trap2 = Value('i', 1)
         self.caught3.value = 0
+        self.game_finished = False
 
         if self.timer_t2 is not None:
             self.timer_t2.cancel()
@@ -292,10 +476,6 @@ class CubChase(QWidget):
         self.screen.blit(bg, [0, 0])
         self._backgroundResult = pygame.image.load("rezultatKonacno.png")
         self.screen.blit(self._backgroundResult, [0, 0])
-        #ovo nece trebati kada bude slika za dugme
-        #samo izracunati koordinate
-        #white = (255, 255, 255)
-        #pygame.draw.rect(self._display_surf, white, (300, 200, 40, 50))
 
         font = pygame.font.Font('Sketch_Block.ttf', 20)
         black = (255, 255, 255)
@@ -333,9 +513,8 @@ class CubChase(QWidget):
             self.enemyVel = self.enemyVel + 1
 
         wait = True
-        wait1 = True # za HOME
-        wait2 = True # za NEXT LEVEL
-        while wait and wait2: # and wait1:
+        wait2 = True  # za NEXT LEVEL
+        while wait and wait2:
             # pratiti poziciju kursora
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -343,14 +522,10 @@ class CubChase(QWidget):
 
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     mouse_pos = event.pos
-                    if 60 < mouse_pos[0] < 150 and 427 < mouse_pos[1] < 457:
-                        wait1 = False
                     if 495 < mouse_pos[0] < 585 and 430 < mouse_pos[1] < 460:
                         wait2 = False
         if not wait2:
-            self.showMaze()
-        #elif not wait1:
-        #    self.initUI()
+            self.showMaze(self.name1, self.name2)
 
     def showGameOver(self):
         bg = pygame.image.load("white.png")
@@ -391,19 +566,22 @@ class CubChase(QWidget):
             self.screen.blit(self.crown, [29, 72])
         elif self.playerOneTotal > self.playerTwoTotal:
             self.screen.blit(self.crown, [468, 72])
+
         pygame.display.update()
+
         wait = True
         wait1 = True
-        while wait: # and wait1:
+        while wait and wait1:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     wait = False
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     mouse_pos = event.pos
-                    if 60 < mouse_pos[0] < 150 and 427 < mouse_pos[1] < 457:
-                        wait1 = False
-        #if not wait1:
-        #    self.initUI()
+                    if self.is_tournament:
+                        if 250 < mouse_pos[0] < 390 and 120 < mouse_pos[1] < 435:
+                            wait1 = False
+        if not wait1:
+            return
 
     def on_render(self):
         self.screen = pygame.display.set_mode((self.windowWidth, self.windowHeight))

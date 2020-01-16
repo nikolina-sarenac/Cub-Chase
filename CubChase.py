@@ -597,8 +597,14 @@ class CubChase(QWidget):
     def showGameOver(self):
         bg = pygame.image.load("white.png")
         self.screen.blit(bg, [0, 0])
-        self._backgroundResult = pygame.image.load("GameOverKonacno.jpg")
-        self.screen.blit(self._backgroundResult, [0, 0])
+
+        if self.is_tournament and not self.one_winner:
+            self.continue_img = pygame.image.load("GameOverTurnirContinue.jpg")
+            self.screen.blit(self.continue_img, [0, 0])
+        else:
+            self._backgroundResult = pygame.image.load("GameOverKonacno.jpg")
+            self.screen.blit(self._backgroundResult, [0, 0])
+
         font = pygame.font.Font('Sketch_Block.ttf', 20)
         black = (255, 255, 255)
 
@@ -634,10 +640,6 @@ class CubChase(QWidget):
         elif self.playerOneTotal > self.playerTwoTotal:
             self.screen.blit(self.crown, [468, 72])
 
-        if self.is_tournament and not self.one_winner:
-            self.continue_img = pygame.image.load("startdugme.jpg").convert()
-            self.screen.blit(self.continue_img, [255, 415])
-
         pygame.display.update()
 
         wait = True
@@ -649,7 +651,7 @@ class CubChase(QWidget):
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     mouse_pos = event.pos
                     if self.is_tournament:
-                        if 250 < mouse_pos[0] < 390 and 120 < mouse_pos[1] < 435:
+                        if 488 < mouse_pos[0] < 600 and 425 < mouse_pos[1] < 465:
                             wait1 = False
         if not wait1:
             return

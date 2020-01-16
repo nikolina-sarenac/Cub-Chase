@@ -4,8 +4,15 @@
     <list default="true" id="5f0a1f15-81cb-48ae-bd5d-bed934f7677a" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CubChase.py" beforeDir="false" afterPath="$PROJECT_DIR$/CubChase.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GameOverKonacno.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/names.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/playWin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pocetna.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/pocetna.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pocetna2.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pozadina2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/rezultatKonacno.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/turnirPozadina.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/turnirPozadina.jpg" afterDir="false" />
     </list>
-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -21,20 +28,8 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../CubChase (1).py" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
-  </component>
-  <component name="RunDashboard">
-    <option name="ruleStates">
-      <list>
-        <RuleState>
-          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
-        </RuleState>
-        <RuleState>
-          <option name="name" value="StatusDashboardGroupingRule" />
-        </RuleState>
-      </list>
-    </option>
   </component>
   <component name="RunManager" selected="Python.CubChase">
     <configuration name="CubChase" type="PythonConfigurationType" factoryName="Python" temporary="true">
@@ -86,6 +81,18 @@
       </list>
     </recent_temporary>
   </component>
+  <component name="ServiceViewManager">
+    <option name="viewStates">
+      <list>
+        <serviceView>
+          <treeState>
+            <expand />
+            <select />
+          </treeState>
+        </serviceView>
+      </list>
+    </option>
+  </component>
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -117,37 +124,37 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="409" y="4" key="#CubChase/0.0.1366.728@0.0.1366.728" timestamp="1578915089891" />
-    <state x="463" y="120" key="FileChooserDialogImpl" timestamp="1579023089728">
+    <state x="463" y="120" key="FileChooserDialogImpl" timestamp="1579194154837">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="463" y="120" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1579023089728" />
+    <state x="463" y="120" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1579194154837" />
     <state x="0" y="0" key="FileDocumentManager.FileCacheConflict" timestamp="1578927623182">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="0" y="0" key="FileDocumentManager.FileCacheConflict/0.0.1366.728@0.0.1366.728" timestamp="1578927623182" />
-    <state width="1328" height="174" key="GridCell.Tab.0.bottom" timestamp="1579023665841">
+    <state width="672" height="174" key="GridCell.Tab.0.bottom" timestamp="1579194445601">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1328" height="174" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1579023665841" />
-    <state width="1328" height="174" key="GridCell.Tab.0.center" timestamp="1579023665840">
+    <state width="672" height="174" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1579194445601" />
+    <state width="672" height="174" key="GridCell.Tab.0.center" timestamp="1579194445600">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1328" height="174" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1579023665840" />
-    <state width="1328" height="174" key="GridCell.Tab.0.left" timestamp="1579023665840">
+    <state width="672" height="174" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1579194445600" />
+    <state width="672" height="174" key="GridCell.Tab.0.left" timestamp="1579194445600">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1328" height="174" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1579023665840" />
-    <state width="1328" height="174" key="GridCell.Tab.0.right" timestamp="1579023665840">
+    <state width="672" height="174" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1579194445600" />
+    <state width="672" height="174" key="GridCell.Tab.0.right" timestamp="1579194445601">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1328" height="174" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1579023665840" />
+    <state width="672" height="174" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1579194445601" />
     <state x="186" y="0" key="SettingsEditor" timestamp="1578915111347">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="186" y="0" key="SettingsEditor/0.0.1366.728@0.0.1366.728" timestamp="1578915111347" />
-    <state x="390" y="190" key="com.intellij.ide.util.TipDialog" timestamp="1578946885594">
+    <state x="390" y="190" key="com.intellij.ide.util.TipDialog" timestamp="1579194051661">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="390" y="190" key="com.intellij.ide.util.TipDialog/0.0.1366.728@0.0.1366.728" timestamp="1578946885594" />
+    <state x="390" y="190" key="com.intellij.ide.util.TipDialog/0.0.1366.728@0.0.1366.728" timestamp="1579194051661" />
   </component>
 </project>

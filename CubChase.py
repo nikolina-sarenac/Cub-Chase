@@ -39,7 +39,7 @@ class CubChase(QWidget):
         self._life = None
         self.add_force = False
         self.crown = None
-        self.continue_img = None
+        self.continue_img = None   #OVU LINIJU DODATI
 
         self.windowWidth = 640
         self.windowHeight = 480
@@ -78,7 +78,7 @@ class CubChase(QWidget):
 
     def initUI(self):
         self.hbox = QHBoxLayout(self)
-        self.pixmap = QPixmap("pocetna2.jpg")
+        self.pixmap = QPixmap("pocetna.jpg")
         self.setMaximumSize(640, 480)
         self.setMinimumSize(640, 480)
 
@@ -270,12 +270,61 @@ class CubChase(QWidget):
         self.btnT.setVisible(True)
         self.btnOnline.setVisible(True)
 
-    def showTournament(self):
+    def show_tournament(self):
         self.pixmap = QPixmap("turnirPozadina.jpg")
         self.lbl.setPixmap(self.pixmap)
+        self.btn.setVisible(False)
+        self.btnT.setVisible(False)
 
+        self.txtbox4.setVisible(True)
+        self.txtbox5.setVisible(True)
+        self.txtbox6.setVisible(True)
+        self.txtbox7.setVisible(True)
+        self.txtbox8.setVisible(True)
+        self.txtbox9.setVisible(True)
+        self.txtbox10.setVisible(True)
+        self.txtbox11.setVisible(True)
 
+        self.btnStartT.setVisible(True)
+        self.btnBack.setVisible(True)
 
+    def continue_tournament(self):
+        self.is_tournament = True
+        self.num_of_winners = self.counter // 2
+
+        for i in range(0, self.counter, 2):
+            self.player1 = i
+            self.player2 = i + 1
+            self.playerOneTotal = 0
+            self.playerTwoTotal = 0
+            self.enemyVel = 1
+            self.showMaze(self.users[self.player1]['name'], self.users[self.player2]['name'])
+            self.showGameOver()
+
+        # DRUGI KRUG TURNIRA:
+        while self.num_of_winners > 1:
+            self.users_winners = [{} for i in range(self.num_of_winners)]    # niz sa pobednicima
+            win_positions = []                                               # pozicija pobednika u nizu self.users
+
+            j = 0
+            for i in range(0, self.counter):
+                if self.users[i]['winner']:
+                    self.users_winners[j] = self.users[i]               # kopiranje pobednika u novi niz
+                    win_positions.insert(j, i)                          # i = pozicija u nizu self.users
+                    j += 1                                              # j = pozicija u nizu users_winners
+
+            for i in range(0,  self.num_of_winners, 2):
+                self.player1 = win_positions[i]
+                k = i + 1
+                self.player2 = win_positions[k]
+                self.playerOneTotal = 0
+                self.playerTwoTotal = 0
+                self.enemyVel = 1
+                self.showMaze(self.users_winners[i]['name'], self.users_winners[k]['name'])
+                self.num_of_winners -= 1
+                if self.num_of_winners == 1:
+                    self.one_winner = True
+                self.showGameOver()
 
     def start_tournament(self):
         self.users = [{} for i in range(8)]
@@ -358,7 +407,6 @@ class CubChase(QWidget):
         self.enemyOne = pygame.image.load('timon.png')
         self.enemyTwo = pygame.image.load('pumbaa.png')
         self._trap = pygame.image.load("zamka.png")
-        self._names = pygame.image.load("names.png")
         self._board = pygame.image.load("daska.png")
         self._life = pygame.image.load("life.png")
         self.name1 = name1
@@ -367,6 +415,8 @@ class CubChase(QWidget):
         # inicijalizacija igraca i mape
         self.playerOneFinished = False
         self.playerTwoFinished = False
+        self.player_one_dead = False
+        self.player_two_dead = False
         self.x.value = 379
         self.y.value = 210
         self.x2.value = 237
@@ -382,8 +432,6 @@ class CubChase(QWidget):
         self.life1.value = 3
         self.life2.value = 3
         self.add_force = False
-        self.player_one_dead = False
-        self.player_two_dead = False
         self.add_trap1 = Value('i', 1)
         self.add_trap2 = Value('i', 1)
         self.caught3.value = 0
@@ -460,21 +508,41 @@ class CubChase(QWidget):
 
         self.playerOneTotal += self.playerOnePoints
         self.playerTwoTotal += self.playerTwoPoints
+
         p1.kill()
         p2.kill()
         p3.kill()
         p4.kill()
+
         if not quit and not self.game_finished:
             pygame.time.delay(1000)
             self.showResults()
         if self.game_finished:
-            self.showGameOver()
+            if self.is_tournament:
+                self.users[self.player1]['points'] = self.playerTwoTotal
+                self.users[self.player2]['points'] = self.playerOneTotal
+
+                if self.users[self.player1]['points'] > self.users[self.player2]['points']:
+                    self.users[self.player1]['winner'] = True
+                    self.users[self.player2]['winner'] = False
+                elif self.users[self.player1]['points'] < self.users[self.player2]['points']:
+                    self.users[self.player2]['winner'] = True
+                    self.users[self.player1]['winner'] = False
+                else:
+                    #ako je nereseno -> bonus nivo
+                    self.player_one_dead = False
+                    self.player_two_dead = False
+                    self.game_finished = False
+                    self.showResults()
+                return
+            else:
+                self.showGameOver()
         pygame.quit()
 
     def showResults(self):
         bg = pygame.image.load("white.png")
         self.screen.blit(bg, [0, 0])
-        self._backgroundResult = pygame.image.load("rezultatKonacno.png")
+        self._backgroundResult = pygame.image.load("rezultatKonacno.jpg")
         self.screen.blit(self._backgroundResult, [0, 0])
 
         font = pygame.font.Font('Sketch_Block.ttf', 20)
@@ -505,21 +573,20 @@ class CubChase(QWidget):
         self._display_surf.blit(text2, textRect2)
         self._display_surf.blit(result2, res2Rect)
         self._display_surf.blit(total_results2, totalRect2)
-
         pygame.display.update()
+
         self.playerTwoPoints = self.paws1.get_score()
         self.playerOnePoints = self.paws2.get_score()
         if self.enemyVel < 4:
             self.enemyVel = self.enemyVel + 1
 
         wait = True
-        wait2 = True  # za NEXT LEVEL
-        while wait and wait2:
+        wait2 = True # za NEXT LEVEL
+        while wait and wait2: # and wait1:
             # pratiti poziciju kursora
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     wait = False
-
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     mouse_pos = event.pos
                     if 495 < mouse_pos[0] < 585 and 430 < mouse_pos[1] < 460:
@@ -530,7 +597,7 @@ class CubChase(QWidget):
     def showGameOver(self):
         bg = pygame.image.load("white.png")
         self.screen.blit(bg, [0, 0])
-        self._backgroundResult = pygame.image.load("GameOverKonacno.png")
+        self._backgroundResult = pygame.image.load("GameOverKonacno.jpg")
         self.screen.blit(self._backgroundResult, [0, 0])
         font = pygame.font.Font('Sketch_Block.ttf', 20)
         black = (255, 255, 255)
@@ -566,6 +633,10 @@ class CubChase(QWidget):
             self.screen.blit(self.crown, [29, 72])
         elif self.playerOneTotal > self.playerTwoTotal:
             self.screen.blit(self.crown, [468, 72])
+
+        if self.is_tournament and not self.one_winner:
+            self.continue_img = pygame.image.load("startdugme.jpg").convert()
+            self.screen.blit(self.continue_img, [255, 415])
 
         pygame.display.update()
 

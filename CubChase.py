@@ -341,9 +341,12 @@ class CubChase(QWidget):
                 self.player2 = i + 1
                 self.playerOneTotal = 0
                 self.playerTwoTotal = 0
-                self.enemyVel = 1
+                self.waitEnemy.value = 70
                 self.showMaze(self.users[self.player1]['name'], self.users[self.player2]['name'])
-                self.showGameOver()
+                res = self.showGameOver()
+                if res == -1:
+                    pygame.quit()
+                    return
             self.num_of_winners = self.counter // 2
         else:
             for i in range(0, self.counter - 1, 2):
@@ -351,9 +354,12 @@ class CubChase(QWidget):
                 self.player2 = i + 1
                 self.playerOneTotal = 0
                 self.playerTwoTotal = 0
-                self.enemyVel = 1
+                self.waitEnemy.value = 70
                 self.showMaze(self.users[self.player1]['name'], self.users[self.player2]['name'])
-                self.showGameOver()
+                res = self.showGameOver()
+                if res == -1:
+                    pygame.quit()
+                    return
             self.users[self.counter - 1]['winner'] = True         # neparan broj igraca -> poslednji ide direktno dalje
             self.num_of_winners = self.counter // 2 + 1
 
@@ -376,12 +382,15 @@ class CubChase(QWidget):
                     self.player2 = win_positions[k]
                     self.playerOneTotal = 0
                     self.playerTwoTotal = 0
-                    self.enemyVel = 1
+                    self.waitEnemy.value = 70
                     self.showMaze(self.users_winners[i]['name'], self.users_winners[k]['name'])
                     self.num_of_winners -= 1        # posle svake partije -> broj pobednika se smanjuje za 1
                     if self.num_of_winners == 1:
                         self.one_winner = True
-                    self.showGameOver()
+                    res = self.showGameOver()
+                    if res == -1:
+                        pygame.quit()
+                        return
             else:
                 for i in range(0,  self.num_of_winners - 1, 2):
                     self.player1 = win_positions[i]
@@ -389,12 +398,15 @@ class CubChase(QWidget):
                     self.player2 = win_positions[k]
                     self.playerOneTotal = 0
                     self.playerTwoTotal = 0
-                    self.enemyVel = 1
+                    self.waitEnemy.value = 70
                     self.showMaze(self.users_winners[i]['name'], self.users_winners[k]['name'])
                     self.num_of_winners -= 1        # posle svake partije -> broj pobednika se smanjuje za 1
                     if self.num_of_winners == 1:
                         self.one_winner = True
-                    self.showGameOver()
+                    res = self.showGameOver()
+                    if res == -1:
+                        pygame.quit()
+                        return
 
     def start_tournament(self):
         self.users = [{} for i in range(8)]
@@ -659,6 +671,7 @@ class CubChase(QWidget):
             else:
                 self.showGameOver()
         pygame.quit()
+        sys.exit()
 
     def make_connection(self):
         self.pixmap = QPixmap("connect2.jpg")
@@ -743,8 +756,8 @@ class CubChase(QWidget):
 
         quit = False
         timer = Timer(15.0, self.timer_stopped)
-        # timerBomb = Timer(25.0, self.timer_bomb_stopped)
-        # timerBomb.start()
+        timerBomb = Timer(5.0, self.timer_bomb_stopped)
+        timerBomb.start()
         timer.start()
 
         while not self.playerOneFinished or not self.playerTwoFinished:
@@ -807,6 +820,7 @@ class CubChase(QWidget):
             pygame.time.delay(5000)
             self.showGameOver()
         pygame.quit()
+        sys.exit()
 
     def showResults(self):
         self.x.value = 379
@@ -936,6 +950,8 @@ class CubChase(QWidget):
                             wait1 = False
         if not wait1:
             return
+        if not wait:
+            return -1
 
     def on_render(self):
         self.screen = pygame.display.set_mode((self.windowWidth, self.windowHeight))
@@ -1042,7 +1058,7 @@ class CubChase(QWidget):
             self._display_surf.blit(self._life, [xl, yl])
             xl = xl + 25
 
-        total = self.maze.get_total()
+        total = self.maze.get_total() - 1
         #if (self.paws1.get_score() + self.paws2.get_score()) == total:
         if self.x.value > (640 - self.matW) and self.y.value > (480 - 2 * self.matH):
             self.playerOneFinished = True

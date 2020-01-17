@@ -57,7 +57,11 @@ def threaded_client(conn, player):
     while True:
         # sacekaj ready poruku
         print("Waiting for ready signal from " + str(player))
-        rec = conn.recv(2048).decode()
+        try:
+            rec = conn.recv(2048).decode()
+        except:
+            break
+
         if rec == "ready":
             ready[player] = "1"
             print(rec + " " + str(player))

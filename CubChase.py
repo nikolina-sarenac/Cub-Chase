@@ -609,25 +609,24 @@ class CubChase(QWidget):
         self.n.client.send(str.encode(data))
         # ceka da primi ime protivnika
         opponent = self.n.client.recv(2048).decode()
-        self.showMazeOnline(self.txtbox3.text(), opponent)
-
-    def showMazeOnline(self, myName, opponentName):
-        self.online = 1
-        self.hide()
-        self.init_pygame()
-        self.init_players_and_maze()
-
-        self.name1 = ""
-        self.name2 = ""
+        myName = self.txtbox3.text()
         if len(myName) == 0:
             myName = "player" + str(self.me)
 
         if self.me == 1:
             self.name1 = myName
-            self.name2 = opponentName
+            self.name2 = opponent
         else:
-            self.name1 = opponentName
+            self.name1 = opponent
             self.name2 = myName
+
+        self.showMazeOnline()
+
+    def showMazeOnline(self):
+        self.online = 1
+        self.hide()
+        self.init_pygame()
+        self.init_players_and_maze()
 
         if self.timer_t2 is not None:
             self.timer_t2.cancel()
@@ -751,8 +750,8 @@ class CubChase(QWidget):
         black = (255, 255, 255)
 
         text = font.render(self.name1, True, black)
-        result = font.render(str(self.playerTwoPoints), True, black)
-        total_results = font.render(str(self.playerTwoTotal), True, black)
+        result = font.render(str(self.playerTwoTotal), True, black)
+        total_results = font.render(str(self.playerTwoPoints), True, black)
         textRect = text.get_rect()
         resRect = result.get_rect()
         totalRect = total_results.get_rect()
@@ -796,7 +795,7 @@ class CubChase(QWidget):
                         wait2 = False
         if not wait2:
             if self.online == 1:
-                self.showMazeOnline(self.name1, self.name2)
+                self.showMazeOnline()
             else:
                 self.showMaze(self.name1, self.name2)
 
@@ -813,8 +812,8 @@ class CubChase(QWidget):
         black = (255, 255, 255)
 
         text = font.render(self.name1, True, black)
-        result = font.render(str(self.playerTwoPoints), True, black)
-        total_results = font.render(str(self.playerTwoTotal), True, black)
+        result = font.render(str(self.playerTwoTotal), True, black)
+        total_results = font.render(str(self.playerTwoPoints), True, black)
         textRect = text.get_rect()
         resRect = result.get_rect()
         totalRect = total_results.get_rect()

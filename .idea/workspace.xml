@@ -2,15 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5f0a1f15-81cb-48ae-bd5d-bed934f7677a" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/Cub-Chase.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Cub-Chase.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CubChase.py" beforeDir="false" afterPath="$PROJECT_DIR$/CubChase.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EnemyProcess.py" beforeDir="false" afterPath="$PROJECT_DIR$/EnemyProcess.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PlayerProcess.py" beforeDir="false" afterPath="$PROJECT_DIR$/PlayerProcess.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/result.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/rsz_lion.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/white.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/network.py" beforeDir="false" afterPath="$PROJECT_DIR$/network.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />

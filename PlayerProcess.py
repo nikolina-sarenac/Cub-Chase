@@ -5,7 +5,7 @@ def player_function(xk, yk, qin, q):
     run = True
     width = 25
     height = 25
-    vel = 4
+    vel = 2
     matW = 640 / 22
     matH = 480 / 16
     maze = CubMaze.Maze()

@@ -3,6 +3,7 @@ from PyQt5.QtCore import (Qt, QSize)
 from PyQt5.QtGui import (QPixmap, QIcon)
 from multiprocessing import Process, Queue, Value
 from threading import Timer
+from network import Network
 import sys
 import pygame
 import CubMaze
@@ -39,7 +40,9 @@ class CubChase(QWidget):
         self._life = None
         self.add_force = False
         self.crown = None
-        self.continue_img = None   #OVU LINIJU DODATI
+        self.continue_img = None
+        self.name1 = ""
+        self.name2 = ""
 
         self.windowWidth = 640
         self.windowHeight = 480
@@ -60,9 +63,9 @@ class CubChase(QWidget):
         self.caught3 = Value('i', 0)
         self.add_trap1 = Value('i', 1)
         self.add_trap2 = Value('i', 1)
+        self.waitEnemy = Value('i', 70)
         self.width = 25
         self.height = 25
-        self.enemyVel = 1
         self.matW = 640 / 22
         self.matH = 480 / 16
         self.run = True
@@ -73,6 +76,9 @@ class CubChase(QWidget):
         self.timer_t2 = None
         self.is_tournament = False
         self.one_winner = False
+        self.online = 0
+        self.me = 0
+        self.n = None
 
         self.initUI()
 
@@ -240,50 +246,17 @@ class CubChase(QWidget):
         self.btnConnect.move(260, 353)
         self.btnConnect.setVisible(False)
 
+        self.btnBackOnline = QPushButton('', self)
+        self.btnBackOnline.clicked.connect(self.show_back)
+        self.btnBackOnline.setStyleSheet('background-color: rgba(255, 255, 255, 0)')
+        self.btnBackOnline.setCursor(Qt.PointingHandCursor)
+        self.btnBackOnline.resize(90, 25)
+        self.btnBackOnline.move(30, 437)
+        self.btnBackOnline.setVisible(False)
+
         self.show()
 
-    def show_network(self):
-        self.pixmap = QPixmap("connect.png")
-        self.lbl.setPixmap(self.pixmap)
-        self.txtbox3.setVisible(True)
-        self.btnBack.setVisible(True)
-        self.btnConnect.setVisible(True)
-        self.txtbox1.setVisible(False)
-        self.txtbox2.setVisible(False)
-        self.txtbox4.setVisible(False)
-        self.txtbox5.setVisible(False)
-        self.txtbox6.setVisible(False)
-        self.txtbox7.setVisible(False)
-        self.txtbox8.setVisible(False)
-        self.txtbox9.setVisible(False)
-        self.txtbox10.setVisible(False)
-        self.txtbox11.setVisible(False)
-        self.btn.setVisible(False)
-        self.btnT.setVisible(False)
-        self.btnOnline.setVisible(False)
-
-    def make_connection(self):
-        pass
-
-    def showDialog(self):
-        self.pixmap = QPixmap("pozadina2.jpg")
-        self.lbl.setPixmap(self.pixmap)
-
-        self.txtbox1.setVisible(True)
-        self.txtbox2.setVisible(True)
-        self.btn1.setVisible(True)
-        self.btn.setVisible(False)
-        self.btnT.setVisible(False)
-        self.btnOnline.setVisible(False)
-        self.btnBack2.setVisible(True)
-        self.enemyVel = 1
-        self.show()
-
-    def show_back(self):
-        self.pixmap = QPixmap("pocetna.jpg")
-        self.lbl.setPixmap(self.pixmap)
-        self.btnStartT.setVisible(False)
-        self.btnBack.setVisible(False)
+    def hide_all(self):
         self.txtbox1.setVisible(False)
         self.txtbox2.setVisible(False)
         self.txtbox3.setVisible(False)
@@ -295,17 +268,32 @@ class CubChase(QWidget):
         self.txtbox9.setVisible(False)
         self.txtbox10.setVisible(False)
         self.txtbox11.setVisible(False)
-        self.btnBack2.setVisible(False)
+        self.btn.setVisible(False)
         self.btn1.setVisible(False)
-        self.btn.setVisible(True)
-        self.btnT.setVisible(True)
-        self.btnOnline.setVisible(True)
+        self.btnT.setVisible(False)
+        self.btnBack.setVisible(False)
+        self.btnBack2.setVisible(False)
+        self.btnBackOnline.setVisible(False)
+        self.btnOnline.setVisible(False)
+        self.btnStartT.setVisible(False)
+        self.btnConnect.setVisible(False)
+
+    def showDialog(self):
+        self.pixmap = QPixmap("pozadina2.jpg")
+        self.lbl.setPixmap(self.pixmap)
+        self.hide_all()
+
+        self.txtbox1.setVisible(True)
+        self.txtbox2.setVisible(True)
+        self.btn1.setVisible(True)
+        self.btnBack2.setVisible(True)
+        self.waitEnemy.value = 70
+        self.show()
 
     def show_tournament(self):
         self.pixmap = QPixmap("turnirPozadina.jpg")
         self.lbl.setPixmap(self.pixmap)
-        self.btn.setVisible(False)
-        self.btnT.setVisible(False)
+        self.hide_all()
 
         self.txtbox4.setVisible(True)
         self.txtbox5.setVisible(True)
@@ -319,6 +307,24 @@ class CubChase(QWidget):
         self.btnStartT.setVisible(True)
         self.btnBack.setVisible(True)
 
+    def show_network(self):
+        self.pixmap = QPixmap("connect.png")
+        self.lbl.setPixmap(self.pixmap)
+        self.hide_all()
+
+        self.txtbox3.setVisible(True)
+        self.btnBackOnline.setVisible(True)
+        self.btnConnect.setVisible(True)
+
+    def show_back(self):
+        self.pixmap = QPixmap("pocetna.jpg")
+        self.lbl.setPixmap(self.pixmap)
+        self.hide_all()
+
+        self.btn.setVisible(True)
+        self.btnT.setVisible(True)
+        self.btnOnline.setVisible(True)
+
     def continue_tournament(self):
         self.is_tournament = True
         self.num_of_winners = self.counter // 2
@@ -328,7 +334,7 @@ class CubChase(QWidget):
             self.player2 = i + 1
             self.playerOneTotal = 0
             self.playerTwoTotal = 0
-            self.enemyVel = 1
+            self.waitEnemy.value = 70
             self.showMaze(self.users[self.player1]['name'], self.users[self.player2]['name'])
             self.showGameOver()
 
@@ -350,7 +356,7 @@ class CubChase(QWidget):
                 self.player2 = win_positions[k]
                 self.playerOneTotal = 0
                 self.playerTwoTotal = 0
-                self.enemyVel = 1
+                self.waitEnemy.value = 70
                 self.showMaze(self.users_winners[i]['name'], self.users_winners[k]['name'])
                 self.num_of_winners -= 1
                 if self.num_of_winners == 1:
@@ -423,8 +429,7 @@ class CubChase(QWidget):
         self.playerTwoTotal = 0
         self.showMaze(self.txtbox1.text(), self.txtbox2.text())
 
-    def showMaze(self, name1, name2):
-        self.hide()
+    def init_pygame(self):
         pygame.init()
         pygame.display.set_caption('Cub Chase')
         self.move(150, 100)
@@ -440,9 +445,8 @@ class CubChase(QWidget):
         self._trap = pygame.image.load("zamka.png")
         self._board = pygame.image.load("daska.png")
         self._life = pygame.image.load("life.png")
-        self.name1 = name1
-        self.name2 = name2
 
+    def init_players_and_maze(self):
         # inicijalizacija igraca i mape
         self.playerOneFinished = False
         self.playerTwoFinished = False
@@ -452,9 +456,9 @@ class CubChase(QWidget):
         self.y.value = 210
         self.x2.value = 237
         self.y2.value = 210
-        self.ex1.value = 437
+        self.ex1.value = 379
         self.ey1.value = 420
-        self.ex2.value = 175
+        self.ex2.value = 237
         self.ey2.value = 420
         self.EnemyChase1.value = 1
         self.EnemyChase2.value = 1
@@ -467,6 +471,14 @@ class CubChase(QWidget):
         self.add_trap2 = Value('i', 1)
         self.caught3.value = 0
         self.game_finished = False
+
+    def showMaze(self, name1, name2):
+        self.hide()
+        self.init_pygame()
+        self.init_players_and_maze()
+
+        self.name1 = name1
+        self.name2 = name2
 
         if self.timer_t2 is not None:
             self.timer_t2.cancel()
@@ -483,13 +495,13 @@ class CubChase(QWidget):
         p1 = Process(target=PlayerProcess.player_function, args=(self.x, self.y, q1input, quit_queue))
         p2 = Process(target=PlayerProcess.player_function, args=(self.x2, self.y2, q2input, quit_queue))
         p3 = Process(target=EnemyProcess.move_enemy, args=(self.ex1, self.ey1, self.x, self.y, self.x2, self.y2,
-                                                           quit_queue, self.life1, self.life2, self.enemyVel,
-                                                           self.EnemyChase1, self.cought1, self.cought2,
-                                                           self.add_trap1, self.add_trap2, self.caught3))
+                                                           quit_queue, self.life1, self.life2, self.EnemyChase1,
+                                                           self.cought1, self.cought2, self.add_trap1, self.add_trap2,
+                                                           self.caught3, self.waitEnemy))
         p4 = Process(target=EnemyProcess.move_enemy, args=(self.ex2, self.ey2, self.x2, self.y2, self.x, self.y,
-                                                           quit_queue, self.life2, self.life1, self.enemyVel,
-                                                           self.EnemyChase2, self.cought2, self.cought1,
-                                                           self.add_trap1, self.add_trap2, self.caught3))
+                                                           quit_queue, self.life2, self.life1, self.EnemyChase2,
+                                                           self.cought2, self.cought1, self.add_trap1, self.add_trap2,
+                                                           self.caught3, self.waitEnemy))
         p1.start()
         p2.start()
         p3.start()
@@ -500,7 +512,7 @@ class CubChase(QWidget):
         timer.start()
 
         while not self.playerOneFinished or not self.playerTwoFinished:
-            pygame.time.delay(30)
+            pygame.time.delay(20)
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -570,9 +582,168 @@ class CubChase(QWidget):
                 self.showGameOver()
         pygame.quit()
 
+    def make_connection(self):
+        self.pixmap = QPixmap("connect2.jpg")
+        self.lbl.setPixmap(self.pixmap)
+
+        self.n = Network()
+        startPos = read_pos1(self.n.getPos())
+        self.me = startPos[2]
+        if self.me == 0:
+            self.x.value = startPos[0]
+            self.y.value = startPos[1]
+            self.x2.value = 237
+            self.y2.value = 210
+        else:
+            self.x2.value = startPos[0]
+            self.y2.value = startPos[1]
+            self.x.value = 379
+            self.y.value = 210
+
+        # primio poziciju, salje svoje ime
+        data = ""
+        if len(self.txtbox3.text()) > 0:
+            data += self.txtbox3.text()
+        else:
+            data += "player"
+        self.n.client.send(str.encode(data))
+        # ceka da primi ime protivnika
+        opponent = self.n.client.recv(2048).decode()
+        self.showMazeOnline(self.txtbox3.text(), opponent)
+
+    def showMazeOnline(self, myName, opponentName):
+        self.online = 1
+        self.hide()
+        self.init_pygame()
+        self.init_players_and_maze()
+
+        self.name1 = ""
+        self.name2 = ""
+        if len(myName) == 0:
+            myName = "player" + str(self.me)
+
+        if self.me == 1:
+            self.name1 = myName
+            self.name2 = opponentName
+        else:
+            self.name1 = opponentName
+            self.name2 = myName
+
+        if self.timer_t2 is not None:
+            self.timer_t2.cancel()
+
+        if self.timer_t1 is not None:
+            self.timer_t1.cancel()
+
+        qinput = Queue()
+        quit_queue = Queue()
+
+        if self.me == 0:
+            p = Process(target=PlayerProcess.player_function, args=(self.x, self.y, qinput, quit_queue))
+        else:
+            p = Process(target=PlayerProcess.player_function, args=(self.x2, self.y2, qinput, quit_queue))
+
+        p3 = Process(target=EnemyProcess.move_enemy, args=(self.ex1, self.ey1, self.x, self.y, self.x2, self.y2,
+                                                           quit_queue, self.life1, self.life2, self.EnemyChase1,
+                                                           self.cought1, self.cought2, self.add_trap1, self.add_trap2,
+                                                           self.caught3, self.waitEnemy))
+        p4 = Process(target=EnemyProcess.move_enemy, args=(self.ex2, self.ey2, self.x2, self.y2, self.x, self.y,
+                                                           quit_queue, self.life2, self.life1, self.EnemyChase2,
+                                                           self.cought2, self.cought1, self.add_trap1, self.add_trap2,
+                                                           self.caught3, self.waitEnemy))
+
+        p.start()
+        p3.start()
+        p4.start()
+
+        while not p.is_alive() or not p3.is_alive() or not p4.is_alive():
+            pass
+
+        self.n.client.send(str.encode("ready"))
+        rec = self.n.client.recv(2048).decode()
+
+        self.on_render()
+
+        quit = False
+        timer = Timer(15.0, self.timer_stopped)
+        # timerBomb = Timer(25.0, self.timer_bomb_stopped)
+        # timerBomb.start()
+        timer.start()
+
+        while not self.playerOneFinished or not self.playerTwoFinished:
+            pygame.time.delay(20)
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.playerOneFinished = True
+                    self.playerTwoFinished = True
+                    quit_queue.put(1)
+                    quit = True
+
+            keys = pygame.key.get_pressed()
+
+            if (not self.player_one_dead and not self.playerOneFinished and self.me == 0) or (
+                    not self.player_two_dead and not self.playerTwoFinished and self.me == 1):
+                if keys[pygame.K_LEFT]:
+                    qinput.put(1)
+                if keys[pygame.K_RIGHT]:
+                    qinput.put(2)
+                if keys[pygame.K_UP]:
+                    qinput.put(3)
+                if keys[pygame.K_DOWN]:
+                    qinput.put(4)
+
+            if self.me == 0:
+                if self.life1.value == 0:
+                    p.kill()
+            else:
+                if self.life2.value == 0:
+                    p.kill()
+
+            p2Pos = (0, 0)
+            if self.me == 0:
+                p2Pos = read_pos(self.n.send(make_pos((self.x.value, self.y.value))))
+                self.x2.value = p2Pos[0]
+                self.y2.value = p2Pos[1]
+            else:
+                p2Pos = read_pos(self.n.send(make_pos((self.x2.value, self.y2.value))))
+                self.x.value = p2Pos[0]
+                self.y.value = p2Pos[1]
+
+            self.redraw_window()
+
+        if self.me == 0:
+            self.n.send(make_pos((self.x.value, self.y.value)))
+        else:
+            self.n.send(make_pos((self.x2.value, self.y2.value)))
+
+        self.playerOneTotal += self.playerOnePoints
+        self.playerTwoTotal += self.playerTwoPoints
+
+        p.kill()
+        p3.kill()
+        p4.kill()
+        if not quit and not self.game_finished:
+            pygame.time.delay(5000)
+            self.showResults()
+        if self.game_finished:
+            pygame.time.delay(5000)
+            self.showGameOver()
+        pygame.quit()
+
     def showResults(self):
-        bg = pygame.image.load("white.png")
-        self.screen.blit(bg, [0, 0])
+        self.x.value = 379
+        self.y.value = 210
+        self.x2.value = 237
+        self.y2.value = 210
+
+        if self.online == 1:
+            if self.me == 0:
+                self.n.send(make_pos((self.x.value, self.y.value)))
+            else:
+                self.n.send(make_pos((self.x2.value, self.y2.value)))
+            self.n.client.send(str.encode("finished"))
+
         self._backgroundResult = pygame.image.load("rezultatKonacno.jpg")
         self.screen.blit(self._backgroundResult, [0, 0])
 
@@ -608,8 +779,9 @@ class CubChase(QWidget):
 
         self.playerTwoPoints = self.paws1.get_score()
         self.playerOnePoints = self.paws2.get_score()
-        if self.enemyVel < 4:
-            self.enemyVel = self.enemyVel + 1
+
+        if self.waitEnemy.value > 20:
+            self.waitEnemy.value -= 10
 
         wait = True
         wait2 = True # za NEXT LEVEL
@@ -623,11 +795,12 @@ class CubChase(QWidget):
                     if 495 < mouse_pos[0] < 585 and 430 < mouse_pos[1] < 460:
                         wait2 = False
         if not wait2:
-            self.showMaze(self.name1, self.name2)
+            if self.online == 1:
+                self.showMazeOnline(self.name1, self.name2)
+            else:
+                self.showMaze(self.name1, self.name2)
 
     def showGameOver(self):
-        bg = pygame.image.load("white.png")
-        self.screen.blit(bg, [0, 0])
 
         if self.is_tournament and not self.one_winner:
             self.continue_img = pygame.image.load("GameOverTurnirContinue.jpg")
@@ -855,38 +1028,33 @@ class CubChase(QWidget):
         pygame.display.update()
 
     def check_paws(self):
-        mx1 = int(self.x.value // self.matW)
-        mx2 = int((self.x.value + self.width) // self.matW)
-        my1 = int((self.y.value + self.height) // self.matH)
-        my2 = int(self.y.value // self.matH)
-        val111 = self.paws1.get_value(mx1, my1)
-        val112 = self.paws1.get_value(mx2, my1)
-        val113 = self.paws1.get_value(mx1, my2)
-        val114 = self.paws1.get_value(mx2, my2)
-        val121 = self.paws2.get_value(mx1, my1)
-        val122 = self.paws2.get_value(mx2, my1)
-        val123 = self.paws2.get_value(mx2, my1)
-        val124 = self.paws2.get_value(mx2, my2)
-        if val111 == 0 and val112 == 0 and val113 == 0 and val114 == 0 and val121 == 0 and val122 == 0 and val123 == 0 \
-                and val124 == 0 and self.life1.value > 0:
-            self.paws1.set_value(mx1, my1)
+        x = self.x.value + 12
+        y = self.y.value + 12
+        mx = int(x // self.matW)
+        my = int(y // self.matH)
 
-        mx1 = int(self.x2.value // self.matW)
-        mx2 = int((self.x2.value + self.width) // self.matW)
-        my1 = int((self.y2.value + self.height) // self.matH)
-        my2 = int(self.y2.value // self.matH)
-        val111 = self.paws1.get_value(mx1, my1)
-        val112 = self.paws1.get_value(mx2, my1)
-        val113 = self.paws1.get_value(mx1, my2)
-        val114 = self.paws1.get_value(mx2, my2)
-        val121 = self.paws2.get_value(mx1, my1)
-        val122 = self.paws2.get_value(mx2, my1)
-        val123 = self.paws2.get_value(mx2, my1)
-        val124 = self.paws2.get_value(mx2, my2)
-        if val111 == 0 and val112 == 0 and val113 == 0 and val114 == 0 and val121 == 0 and val122 == 0 and val123 == 0 \
-                and val124 == 0 and self.life2.value > 0:
-            self.paws2.set_value(mx1, my1)
+        if self.paws1.get_value(mx, my) == 0 and self.paws2.get_value(mx, my) == 0:
+            self.paws1.set_value(mx, my)
 
+        x = self.x2.value + 12
+        y = self.y2.value + 12
+        mx = int(x // self.matW)
+        my = int(y // self.matH)
+
+        if self.paws1.get_value(mx, my) == 0 and self.paws2.get_value(mx, my) == 0:
+            self.paws2.set_value(mx, my)
+
+
+def read_pos1(str):
+    str = str.split(",")
+    return int(str[0]), int(str[1]), int(str[2])
+
+def read_pos(str):
+    str = str.split(",")
+    return int(str[0]), int(str[1])
+
+def make_pos(tup):
+    return str(tup[0]) + "," + str(tup[1])
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

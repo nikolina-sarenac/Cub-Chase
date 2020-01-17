@@ -2,8 +2,8 @@ import CubMaze
 import pygame
 
 
-def move_enemy(xk, yk, player_x, player_y, other_player_x, other_player_y, q, life1, life2, vel, chase, cought,\
-               cought_other, trap1, trap2, trap_caught):
+def move_enemy(xk, yk, player_x, player_y, other_player_x, other_player_y, q, life1, life2, chase, cought,\
+               cought_other, trap1, trap2, trap_caught, wait):
         run = True
         width = 25
         height = 25
@@ -13,6 +13,7 @@ def move_enemy(xk, yk, player_x, player_y, other_player_x, other_player_y, q, li
         x = xk.value
         y = yk.value
         player_is_dead = False
+        vel = 1
         while run:
             if not q.empty():
                 return
@@ -103,12 +104,14 @@ def move_enemy(xk, yk, player_x, player_y, other_player_x, other_player_y, q, li
 
             if player_x.value < x + 12 < player_x.value + 25 and player_y.value < y + 12 < \
                     player_y.value + 25:
+                pygame.time.delay(1500)
                 life1.value -= 1
                 cought.value = 1
                 pygame.time.delay(3000)
 
             if other_player_x.value < x + 12 < other_player_x.value + 25 and other_player_y.value < y + 12 < \
                     other_player_y.value + 25:
+                pygame.time.delay(1500)
                 life2.value -= 1
                 cought_other.value = 1
                 pygame.time.delay(3000)
@@ -130,4 +133,4 @@ def move_enemy(xk, yk, player_x, player_y, other_player_x, other_player_y, q, li
                     pygame.time.wait(5000)
                 trap_caught.value = 0
 
-            pygame.time.wait(30)
+            pygame.time.wait(wait.value)

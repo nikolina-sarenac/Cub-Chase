@@ -39,6 +39,13 @@ class CubChase(QWidget):
         self._board = None
         self._life = None
         self.add_force = False
+        self.add_bomb = False
+        self.bomb_activated = False
+        self.bomb_caught1 = False
+        self.bomb_caught2 = False
+        self.timerBomb = None
+        self.bombCount = 0
+        self.bomb_coord = (0, 0)
         self.crown = None
         self.continue_img = None
         self.name1 = ""
@@ -414,6 +421,39 @@ class CubChase(QWidget):
     def timer_stopped(self):
         self.add_force = True
 
+    def timer_bomb_stopped(self):
+        self.bomb_caught1 = False
+        self.bomb_caught2 = False
+
+        if self.bombCount == 0:
+            self.bomb_coord = (308, 32)
+        elif self.bombCount == 1:
+            self.bomb_coord = (583, 182)
+        elif self.bombCount == 2:
+            self.bomb_coord = (147, 345)
+        elif self.bombCount == 3:
+            self.bomb_coord = (32, 165)
+
+        if self.bombCount == 3:
+            self.bombCount = 0
+        else:
+            self.bombCount += 1
+
+        self.add_bomb = True
+        timer = Timer(2.0, self.bomb_explosion)
+        timer.start()
+
+    def bomb_explosion(self):
+        self.add_bomb = False
+        self.bomb_activated = True
+        timer = Timer(1.5, self.bomb_exploded)
+        timer.start()
+
+    def bomb_exploded(self):
+        self.bomb_activated = False
+        self.timerBomb = Timer(5.0, self.timer_bomb_stopped)
+        self.timerBomb.start()
+
     #nakon 10 sekundi ce se ove vrednost setovati
     def timer_trap1(self):
         self.add_trap1.value = 0
@@ -445,6 +485,8 @@ class CubChase(QWidget):
         self._trap = pygame.image.load("zamka.png")
         self._board = pygame.image.load("daska.png")
         self._life = pygame.image.load("life.png")
+        self._bomb = pygame.image.load("bomb.png")
+        self._explosion = pygame.image.load("explosionPic.png")
 
     def init_players_and_maze(self):
         # inicijalizacija igraca i mape
@@ -467,6 +509,10 @@ class CubChase(QWidget):
         self.life1.value = 3
         self.life2.value = 3
         self.add_force = False
+        self.add_bomb = False
+        self.bomb_activated = False
+        self.bomb_caught1 = False
+        self.bomb_caught2 = False
         self.add_trap1 = Value('i', 1)
         self.add_trap2 = Value('i', 1)
         self.caught3.value = 0
@@ -485,6 +531,9 @@ class CubChase(QWidget):
 
         if self.timer_t1 is not None:
             self.timer_t1.cancel()
+
+        if self.timerBomb is not None:
+            self.timerBomb.cancel()
 
         self.on_render()
 
@@ -508,8 +557,11 @@ class CubChase(QWidget):
         p4.start()
 
         quit = False
-        timer = Timer(10.0, self.timer_stopped)
+
+        timer = Timer(15.0, self.timer_stopped)
+        self.timerBomb = Timer(5.0, self.timer_bomb_stopped)
         timer.start()
+        self.timerBomb.start()
 
         while not self.playerOneFinished or not self.playerTwoFinished:
             pygame.time.delay(20)
@@ -992,6 +1044,22 @@ class CubChase(QWidget):
             elif 303 < self.x2.value < 335 and 300 < self.y2.value < 330:
                 self.life2.value = self.life2.value + 1
                 self.add_force = False
+
+        if self.add_bomb:
+            self._display_surf.blit(self._bomb, self.bomb_coord)
+
+        if self.bomb_activated:
+            self._display_surf.blit(self._explosion, [self.bomb_coord[0] - 12, self.bomb_coord[1] - 12])
+            if (self.bomb_coord[0] - 12) < (self.x.value + 12) < (self.bomb_coord[0] + 38) and \
+                    (self.bomb_coord[1] - 12) < (self.y.value + 12) < (self.bomb_coord[1] + 38) and \
+                    self.bomb_caught1 is False:
+                self.bomb_caught1 = True
+                self.life1.value -= 1
+            if (self.bomb_coord[0] - 12) < (self.x2.value + 12) < (self.bomb_coord[0] + 38) and \
+                    (self.bomb_coord[1] - 12) < (self.y2.value + 12) < (self.bomb_coord[1] + 38) and \
+                    self.bomb_caught1 is False:
+                self.bomb_caught2 = True
+                self.life2.value -= 1
 
         #kad igrac dodirne zamku, bude aktivna jos 10 sekundi i onda nestane i tad kad je neprijatelj dodirnuo setuje
         # se vrednost na 2, da bi se znalo da je zamka aktivirana

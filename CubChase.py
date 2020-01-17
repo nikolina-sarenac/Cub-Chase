@@ -334,16 +334,28 @@ class CubChase(QWidget):
 
     def continue_tournament(self):
         self.is_tournament = True
-        self.num_of_winners = self.counter // 2
 
-        for i in range(0, self.counter, 2):
-            self.player1 = i
-            self.player2 = i + 1
-            self.playerOneTotal = 0
-            self.playerTwoTotal = 0
-            self.waitEnemy.value = 70
-            self.showMaze(self.users[self.player1]['name'], self.users[self.player2]['name'])
-            self.showGameOver()
+        if self.counter % 2 == 0:
+            for i in range(0, self.counter, 2):
+                self.player1 = i
+                self.player2 = i + 1
+                self.playerOneTotal = 0
+                self.playerTwoTotal = 0
+                self.enemyVel = 1
+                self.showMaze(self.users[self.player1]['name'], self.users[self.player2]['name'])
+                self.showGameOver()
+            self.num_of_winners = self.counter // 2
+        else:
+            for i in range(0, self.counter - 1, 2):
+                self.player1 = i
+                self.player2 = i + 1
+                self.playerOneTotal = 0
+                self.playerTwoTotal = 0
+                self.enemyVel = 1
+                self.showMaze(self.users[self.player1]['name'], self.users[self.player2]['name'])
+                self.showGameOver()
+            self.users[self.counter - 1]['winner'] = True         # neparan broj igraca -> poslednji ide direktno dalje
+            self.num_of_winners = self.counter // 2 + 1
 
         # DRUGI KRUG TURNIRA:
         while self.num_of_winners > 1:
@@ -357,18 +369,32 @@ class CubChase(QWidget):
                     win_positions.insert(j, i)                          # i = pozicija u nizu self.users
                     j += 1                                              # j = pozicija u nizu users_winners
 
-            for i in range(0,  self.num_of_winners, 2):
-                self.player1 = win_positions[i]
-                k = i + 1
-                self.player2 = win_positions[k]
-                self.playerOneTotal = 0
-                self.playerTwoTotal = 0
-                self.waitEnemy.value = 70
-                self.showMaze(self.users_winners[i]['name'], self.users_winners[k]['name'])
-                self.num_of_winners -= 1
-                if self.num_of_winners == 1:
-                    self.one_winner = True
-                self.showGameOver()
+            if self.num_of_winners % 2 == 0:
+                for i in range(0,  self.num_of_winners, 2):
+                    self.player1 = win_positions[i]
+                    k = i + 1
+                    self.player2 = win_positions[k]
+                    self.playerOneTotal = 0
+                    self.playerTwoTotal = 0
+                    self.enemyVel = 1
+                    self.showMaze(self.users_winners[i]['name'], self.users_winners[k]['name'])
+                    self.num_of_winners -= 1        # posle svake partije -> broj pobednika se smanjuje za 1
+                    if self.num_of_winners == 1:
+                        self.one_winner = True
+                    self.showGameOver()
+            else:
+                for i in range(0,  self.num_of_winners - 1, 2):
+                    self.player1 = win_positions[i]
+                    k = i + 1
+                    self.player2 = win_positions[k]
+                    self.playerOneTotal = 0
+                    self.playerTwoTotal = 0
+                    self.enemyVel = 1
+                    self.showMaze(self.users_winners[i]['name'], self.users_winners[k]['name'])
+                    self.num_of_winners -= 1        # posle svake partije -> broj pobednika se smanjuje za 1
+                    if self.num_of_winners == 1:
+                        self.one_winner = True
+                    self.showGameOver()
 
     def start_tournament(self):
         self.users = [{} for i in range(8)]
@@ -415,7 +441,7 @@ class CubChase(QWidget):
             self.users[self.counter]['winner'] = False
             self.counter += 1
 
-        if self.counter == 4 or self.counter == 8:
+        if 4 <= self.counter <= 8:
             self.continue_tournament()
 
     def timer_stopped(self):
@@ -1054,12 +1080,12 @@ class CubChase(QWidget):
                     (self.bomb_coord[1] - 12) < (self.y.value + 12) < (self.bomb_coord[1] + 38) and \
                     self.bomb_caught1 is False:
                 self.bomb_caught1 = True
-                self.life1.value -= 1
+                self.life1.value = 0
             if (self.bomb_coord[0] - 12) < (self.x2.value + 12) < (self.bomb_coord[0] + 38) and \
                     (self.bomb_coord[1] - 12) < (self.y2.value + 12) < (self.bomb_coord[1] + 38) and \
-                    self.bomb_caught1 is False:
+                    self.bomb_caught2 is False:
                 self.bomb_caught2 = True
-                self.life2.value -= 1
+                self.life2.value = 0
 
         #kad igrac dodirne zamku, bude aktivna jos 10 sekundi i onda nestane i tad kad je neprijatelj dodirnuo setuje
         # se vrednost na 2, da bi se znalo da je zamka aktivirana

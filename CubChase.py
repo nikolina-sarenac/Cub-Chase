@@ -106,9 +106,9 @@ class CubChase(QWidget):
         self.txtbox2.setVisible(False)
 
         self.txtbox3 = QLineEdit(self)
-        self.txtbox3.move(45, 130)
+        self.txtbox3.move(30, 160)
         self.txtbox3.resize(200, 35)
-        self.txtbox3.setStyleSheet('background-color: #f5deb3; border: 2px solid teal; font: Bold')
+        self.txtbox3.setStyleSheet('background-color: rgba(143,188,143, 90); border: 2px solid burlywood; font: Bold')
         self.txtbox3.setAlignment(Qt.AlignCenter)
         self.txtbox3.setVisible(False)
 
@@ -188,7 +188,7 @@ class CubChase(QWidget):
         self.btnT.setVisible(True)
 
         self.btnOnline = QPushButton('', self)
-        self.btnOnline.clicked.connect(self.show_tournament)
+        self.btnOnline.clicked.connect(self.show_network)
         self.btnOnline.setStyleSheet('background-color: rgba(255, 255, 255, 0)')
         self.btnOnline.setCursor(Qt.PointingHandCursor)
         self.btnOnline.setIconSize(QSize(89, 46))
@@ -232,7 +232,38 @@ class CubChase(QWidget):
         self.btnBack2.move(35, 423)
         self.btnBack2.setVisible(False)
 
+        self.btnConnect = QPushButton('', self)
+        self.btnConnect.clicked.connect(self.make_connection)
+        self.btnConnect.setStyleSheet('background-color: rgba(255, 255, 255, 0)')
+        self.btnConnect.setCursor(Qt.PointingHandCursor)
+        self.btnConnect.resize(130, 30)
+        self.btnConnect.move(260, 353)
+        self.btnConnect.setVisible(False)
+
         self.show()
+
+    def show_network(self):
+        self.pixmap = QPixmap("connect.png")
+        self.lbl.setPixmap(self.pixmap)
+        self.txtbox3.setVisible(True)
+        self.btnBack.setVisible(True)
+        self.btnConnect.setVisible(True)
+        self.txtbox1.setVisible(False)
+        self.txtbox2.setVisible(False)
+        self.txtbox4.setVisible(False)
+        self.txtbox5.setVisible(False)
+        self.txtbox6.setVisible(False)
+        self.txtbox7.setVisible(False)
+        self.txtbox8.setVisible(False)
+        self.txtbox9.setVisible(False)
+        self.txtbox10.setVisible(False)
+        self.txtbox11.setVisible(False)
+        self.btn.setVisible(False)
+        self.btnT.setVisible(False)
+        self.btnOnline.setVisible(False)
+
+    def make_connection(self):
+        pass
 
     def showDialog(self):
         self.pixmap = QPixmap("pozadina2.jpg")
@@ -480,7 +511,7 @@ class CubChase(QWidget):
 
             keys = pygame.key.get_pressed()
 
-            if not self.player_one_dead:
+            if not self.player_one_dead and not self.playerOneFinished:
                 if keys[pygame.K_LEFT]:
                     q1input.put(1)
                 if keys[pygame.K_RIGHT]:
@@ -490,7 +521,7 @@ class CubChase(QWidget):
                 if keys[pygame.K_DOWN]:
                     q1input.put(4)
 
-            if not self.player_two_dead:
+            if not self.player_two_dead and not self.playerTwoFinished:
                 if keys[pygame.K_a]:
                     q2input.put(1)
                 if keys[pygame.K_d]:

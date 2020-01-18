@@ -44,6 +44,8 @@ class CubChase(QWidget):
         self.bomb_caught1 = False
         self.bomb_caught2 = False
         self.timerBomb = None
+        self.timerExplosion = None
+        self.timerExploded = None
         self.bombCount = 0
         self.bomb_coord = (0, 0)
         self.crown = None
@@ -478,14 +480,14 @@ class CubChase(QWidget):
             self.bombCount += 1
 
         self.add_bomb = True
-        timer = Timer(2.0, self.bomb_explosion)
-        timer.start()
+        self.timerExplosion = Timer(2.0, self.bomb_explosion)
+        self.timerExplosion.start()
 
     def bomb_explosion(self):
         self.add_bomb = False
         self.bomb_activated = True
-        timer = Timer(1.5, self.bomb_exploded)
-        timer.start()
+        self.timerExploded = Timer(1.5, self.bomb_exploded)
+        self.timerExploded.start()
 
     def bomb_exploded(self):
         self.bomb_activated = False
@@ -572,6 +574,12 @@ class CubChase(QWidget):
 
         if self.timerBomb is not None:
             self.timerBomb.cancel()
+
+        if self.timerExplosion is not None:
+            self.timerExplosion.cancel()
+
+        if self.timerExploded is not None:
+            self.timerExploded.cancel()
 
         self.on_render()
 
@@ -725,6 +733,12 @@ class CubChase(QWidget):
         if self.timer_t1 is not None:
             self.timer_t1.cancel()
 
+        if self.timerExplosion is not None:
+            self.timerExplosion.cancel()
+
+        if self.timerExploded is not None:
+            self.timerExploded.cancel()
+
         qinput = Queue()
         quit_queue = Queue()
 
@@ -761,7 +775,7 @@ class CubChase(QWidget):
         timer.start()
 
         while not self.playerOneFinished or not self.playerTwoFinished:
-            pygame.time.delay(20)
+            pygame.time.delay(25)
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -1058,14 +1072,14 @@ class CubChase(QWidget):
             self._display_surf.blit(self._life, [xl, yl])
             xl = xl + 25
 
-        total = self.maze.get_total() - 1
-        #if (self.paws1.get_score() + self.paws2.get_score()) == total:
-        if self.x.value > (640 - self.matW) and self.y.value > (480 - 2 * self.matH):
-            self.playerOneFinished = True
-            self.EnemyChase1.value = 0
-        if self.x2.value > (640 - self.matW) and self.y2.value > (480 - 2 * self.matH):
-            self.playerTwoFinished = True
-            self.EnemyChase2.value = 0
+        total = self.maze.get_total() - 100
+        if (self.paws1.get_score() + self.paws2.get_score()) == total:
+            if self.x.value > (640 - self.matW) and self.y.value > (480 - 2 * self.matH):
+                self.playerOneFinished = True
+                self.EnemyChase1.value = 0
+            if self.x2.value > (640 - self.matW) and self.y2.value > (480 - 2 * self.matH):
+                self.playerTwoFinished = True
+                self.EnemyChase2.value = 0
 
         if self.life1.value == 0:
             self.playerOneFinished = True

@@ -100,7 +100,6 @@ def threaded_client(conn, player):
             except:
                 break
 
-
     print("Lost connection")
     conn.close()
 

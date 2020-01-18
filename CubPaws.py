@@ -41,7 +41,10 @@ class Paws:
                 by = by + 1
 
     def set_value(self, x, y):
-        self.matr[x + (y * self.M)] = 1
+        if x == 21 and y == 14:
+            pass
+        else:
+            self.matr[x + (y * self.M)] = 1
 
     def get_score(self):
         sum = 0

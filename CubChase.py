@@ -1109,13 +1109,15 @@ class CubChase(QWidget):
             if (self.bomb_coord[0] - 12) < (self.x.value + 12) < (self.bomb_coord[0] + 38) and \
                     (self.bomb_coord[1] - 12) < (self.y.value + 12) < (self.bomb_coord[1] + 38) and \
                     self.bomb_caught1 is False:
-                self.n.send(make_pos((self.x.value, self.y.value)))
+                if self.online == 1:
+                    self.n.send(make_pos((self.x.value, self.y.value)))
                 self.bomb_caught1 = True
                 self.life1.value = 0
             if (self.bomb_coord[0] - 12) < (self.x2.value + 12) < (self.bomb_coord[0] + 38) and \
                     (self.bomb_coord[1] - 12) < (self.y2.value + 12) < (self.bomb_coord[1] + 38) and \
                     self.bomb_caught2 is False:
-                self.n.send(make_pos((self.x.value, self.y.value)))
+                if self.online == 1:
+                    self.n.send(make_pos((self.x.value, self.y.value)))
                 self.bomb_caught2 = True
                 self.life2.value = 0
 

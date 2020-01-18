@@ -733,6 +733,9 @@ class CubChase(QWidget):
         if self.timer_t1 is not None:
             self.timer_t1.cancel()
 
+        if self.timerBomb is not None:
+            self.timerBomb.cancel()
+
         if self.timerExplosion is not None:
             self.timerExplosion.cancel()
 
